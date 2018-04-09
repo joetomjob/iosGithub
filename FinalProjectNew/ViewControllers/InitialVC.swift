@@ -75,14 +75,7 @@ class InitialVC: UIViewController, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         location = locations.last
         print("\(String(describing:location))")
-        
-        print("\(String(describing: location))")
-
-
-        
-        
         locationManager.stopUpdatingLocation()
-        
         geodocoder.reverseGeocodeLocation(location!, completionHandler: {(placemarks,error)->
             Void in
             print(self.location)
