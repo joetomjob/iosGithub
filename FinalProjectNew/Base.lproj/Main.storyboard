@@ -127,7 +127,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BTC-r7-JYO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="889" y="394"/>
+            <point key="canvasLocation" x="-255" y="964"/>
         </scene>
         <!--Country-->
         <scene sceneID="63K-oh-y2W">
@@ -202,6 +202,7 @@
                     <connections>
                         <outlet property="countrytext" destination="cee-UW-3O7" id="luf-zc-7mK"/>
                         <outlet property="universitytext" destination="jrg-Zd-RrQ" id="dyM-h4-dkn"/>
+                        <segue destination="4OM-bi-CUt" kind="show" identifier="ListngSugue" id="shx-35-feZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xlz-dM-Ez9" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -217,29 +218,41 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ListingCell" textLabel="rlh-Nf-j9R" detailTextLabel="NIJ-vu-Nkg" style="IBUITableViewCellStyleSubtitle" id="YQA-SN-RUY">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ListingCell" id="YQA-SN-RUY" customClass="ListingCell" customModule="FinalProjectNew" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YQA-SN-RUY" id="2gp-Cd-k16">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="rlh-Nf-j9R">
-                                            <rect key="frame" x="16" y="5" width="33.5" height="20.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D2l-dB-y25">
+                                            <rect key="frame" x="16" y="0.0" width="169" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="NIJ-vu-Nkg">
-                                            <rect key="frame" x="16" y="25.5" width="44" height="14.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9bP-ni-eun">
+                                            <rect key="frame" x="16" y="22" width="169" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hra-Ya-aOu">
+                                            <rect key="frame" x="269" y="11" width="90" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="listingName" destination="D2l-dB-y25" id="7Pw-De-SIv"/>
+                                    <outlet property="listingPlace" destination="9bP-ni-eun" id="Rp6-IP-3fp"/>
+                                    <outlet property="listingRate" destination="Hra-Ya-aOu" id="8Fc-2f-Bqo"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -248,10 +261,14 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Listings" id="Tv4-OU-Jtn"/>
+                    <connections>
+                        <outlet property="tableV" destination="iT8-Re-mGc" id="tUC-J0-ddc"/>
+                        <outlet property="tableView" destination="iT8-Re-mGc" id="sA3-Rl-zKx"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ofW-wa-mC9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="657" y="1078"/>
+            <point key="canvasLocation" x="1784.5" y="963.5"/>
         </scene>
         <!--Item-->
         <scene sceneID="gZn-G8-GgY">
@@ -268,11 +285,14 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TSL-qg-t1I" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-338" y="971"/>
+            <point key="canvasLocation" x="1010" y="827"/>
         </scene>
     </scenes>
     <resources>
         <image name="globe.png" width="512" height="512"/>
         <image name="public.png" width="24" height="24"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="FqM-AC-pDF"/>
+    </inferredMetricsTieBreakers>
 </document>

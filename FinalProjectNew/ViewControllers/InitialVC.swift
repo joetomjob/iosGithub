@@ -36,7 +36,7 @@ class InitialVC: UIViewController, CLLocationManagerDelegate {
     }
     
     @IBAction func Search(_ sender: Any) {
-//        self.performSegue(withIdentifier: "Listingsegue", sender: nil)
+        self.performSegue(withIdentifier: "ListngSugue", sender: nil)
     }
     override func viewDidLoad() {
         super.viewDidLoad()

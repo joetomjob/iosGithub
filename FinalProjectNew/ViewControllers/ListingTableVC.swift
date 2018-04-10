@@ -12,6 +12,8 @@ import FirebaseDatabase
 
 class ListingTableVC: UITableViewController {
 
+    @IBOutlet var tableV: UITableView!
+    
     var listingList = Listings()
     var listings : [Listing] { //front end for LandmarkList model object
         get {
@@ -21,11 +23,13 @@ class ListingTableVC: UITableViewController {
             self.listingList.listings = val
         }
     }
-
+    
     var ref : DatabaseReference!
+    var databaseHandle: DatabaseHandle?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadData()
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -34,6 +38,9 @@ class ListingTableVC: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
+    func reloadData(){
+        self.tableV.reloadData()
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -51,15 +58,20 @@ class ListingTableVC: UITableViewController {
         // #warning Incomplete implementation, return the number of rows
         return listings.count
     }
-
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+    {
+        return 88.0;//Choose your custom row height
+    }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ListingCell", for: indexPath)
+        let cell:ListingCell = tableView.dequeueReusableCell(withIdentifier: "ListingCell", for: indexPath) as! ListingCell
 
         // Configure the cell...
         let listing = listings[indexPath.row]
-        cell.textLabel?.text = listing.getName()
-        cell.detailTextLabel?.text = listing.getPlace()
+        cell.listingName.text = listing.getName()
+        cell.listingPlace.text = listing.getPlace()
+        cell.listingRate.text = listing.getRate()
         cell.accessoryType = .disclosureIndicator
         return cell
     }
@@ -116,5 +128,50 @@ class ListingTableVC: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    func loadData() {
+        do{
+            ref =  Database.database().reference().child("Housing").child("Postings")
+            
+            ref.observe(DataEventType.value, with: {(snapshot) in
+                if snapshot.childrenCount > 0{
+                    for listgns in snapshot.children.allObjects as! [DataSnapshot]{
+                        let lstngObject = listgns.value as? [String: AnyObject]
+                        
+                        let area = lstngObject?["Area"] as! String
+                        let bath = lstngObject?["Bath"] as! String
+                        let bed = lstngObject?["Bed"] as! String
+                        let houseDescription = lstngObject?["description"] as! String
+                        let dishwasher = lstngObject?["dishwasher"] as! String
+                        let foodpreference = lstngObject?["foodpreference"] as! String
+                        let furnished = lstngObject?["furnished"] as! String
+                        let houseid = lstngObject?["id"] as! String
+                        let multifamily = lstngObject?["multifamily"] as! String
+                        let name = lstngObject?["name"] as! String
+                        let place = lstngObject?["place"] as! String
+                        let zipcode = lstngObject?["zip"] as! String
+                        let oven = lstngObject?["oven"] as! String
+                        let petfriendly = lstngObject?["petfriendly"] as! String
+                        let pic = lstngObject?["pic"] as! String
+                        let rate = lstngObject?["rate"] as! String
+                        let type = lstngObject?["type"]as! String
+                        let user = lstngObject?["user"] as! String
+                        let washerdryer = lstngObject?["washerdryer"] as! String
+                        
+                        let l = Listing(area: area, bath: bath, bed: bed, houseDescription: houseDescription, dishwasher: dishwasher, foodpreference: foodpreference, furnished: furnished, houseid: houseid, multifamily: multifamily, name: name, place: place, zipcode: zipcode, oven: oven, petfriendly: petfriendly, pic: pic, rate: rate, type: type, user: user, washerdryer: washerdryer)
+                        
+                        self.listingList.listings.append(l)
+                    }
+//                    self.tableVC!.listingList.listings = self.listOfListings
+//                    self.tableVC!.tableV.reloadData()
+                    self.reloadData()
+                }
+            })
+            
+        }
+        catch{
+            print(error)
+        }
+    }
 
 }
