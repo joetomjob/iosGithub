@@ -52,7 +52,7 @@ class InitialVC: UIViewController, CLLocationManagerDelegate {
         }
         
         let mostViewedPosts =  ref.child("Housing")
-        let postings = mostViewedPosts.child("Postings")
+        var postings = mostViewedPosts.child("Postings")
         print("Hi")
         // Do any additional setup after loading the view.
     }
