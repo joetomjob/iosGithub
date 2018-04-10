@@ -103,9 +103,9 @@ class Listing: NSObject, MKAnnotation {
         
     }
     
-//    override convenience init () {
-//        self.init(area: "Unknown", bath: "Unknown", bed: "Unknown", houseDescription: "Unknown", dishwasher: "Unknown", foodpreference: "Unknown", furnished: "Unknown", houseid: "Unknown", multifamily: "Unknown", name: "Unknown", place: "Unknown", zipcode: "Unknown", place: "Unknown", oven: "Unknown", petfriendly: "Unknown", pic: "Unknown", rate: "Unknown", type: "Unknown", user: "Unknown", washerdryer: "Unknown")
-//    }
+    override convenience init () {
+        self.init(area: "Unknown", bath: "Unknown", bed: "Unknown", houseDescription: "Unknown", dishwasher: "Unknown", foodpreference: "Unknown", furnished: "Unknown", houseid: "Unknown", multifamily: "Unknown", name: "Unknown", place: "Unknown", zipcode: "Unknown", oven: "Unknown", petfriendly: "Unknown", pic: "Unknown", rate: "Unknown", type: "Unknown", user: "Unknown", washerdryer: "Unknown")
+    }
     
     //getter and setter for ParkName
     func getId() -> String {
@@ -164,7 +164,7 @@ class Listing: NSObject, MKAnnotation {
     }
     
     //getter and setter for Furnished
-    func setFurnished() -> String {
+    func getFurnished() -> String {
         return furnished
     }
     func setFurnished(furnished: String){

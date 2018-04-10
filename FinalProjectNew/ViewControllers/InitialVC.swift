@@ -35,6 +35,9 @@ class InitialVC: UIViewController, CLLocationManagerDelegate {
         super.init(coder : aDecoder)
     }
     
+    @IBAction func Search(_ sender: Any) {
+//        self.performSegue(withIdentifier: "Listingsegue", sender: nil)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         ref =  Database.database().reference()
@@ -47,13 +50,6 @@ class InitialVC: UIViewController, CLLocationManagerDelegate {
         locationManager.startUpdatingLocation()
         locationManager.delegate = self  //send them who the delegate is
         
-        databaseHandle = ref.child("Housing").observe(.childAdded) { (snapshot) in
-            self.postData.append("")
-        }
-        
-        let mostViewedPosts =  ref.child("Housing")
-        var postings = mostViewedPosts.child("Postings")
-        print("Hi")
         // Do any additional setup after loading the view.
     }
 

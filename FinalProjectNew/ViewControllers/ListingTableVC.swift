@@ -7,29 +7,34 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseDatabase
 
 class ListingTableVC: UITableViewController {
 
-//    var landmarkList = Landmarks()
-//    var landmarks : [Landmark] { //front end for LandmarkList model object
-//        get {
-//            return self.landmarkList.landmarkList
-//        }
-//        set(val) {
-//            self.landmarkList.landmarkList = val
-//        }
-//    }
+    var listingList = Listings()
+    var listings : [Listing] { //front end for LandmarkList model object
+        get {
+            return self.listingList.listings
+        }
+        set(val) {
+            self.listingList.listings = val
+        }
+    }
+
+    var ref : DatabaseReference!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
-
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -44,19 +49,29 @@ class ListingTableVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return listings.count
     }
 
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ListingCell", for: indexPath)
 
         // Configure the cell...
-
+        let listing = listings[indexPath.row]
+        cell.textLabel?.text = listing.getName()
+        cell.detailTextLabel?.text = listing.getPlace()
+        cell.accessoryType = .disclosureIndicator
         return cell
     }
-    */
-
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let listing = listings[indexPath.row]
+        let detailVC = ListingDetailVC(style: .grouped)
+        detailVC.title = listing.title
+        detailVC.listing = listing
+//        detailVC.delegate = mapVC
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

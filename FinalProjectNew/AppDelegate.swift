@@ -14,15 +14,27 @@ import FirebaseDatabase
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var tabBarController:UITabBarController?
     var listOfListings:[Listing] = []
-
+    
+    var ref : DatabaseReference!
+    var postData = [String]()
+    var databaseHandle: DatabaseHandle?
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
         loadData()
         
-        let listings = Listings()
-        listings.listings = listOfListings
+        let listingsList = Listings()
+        listingsList.listings = listOfListings
+        
+//        tabBarController = window?.rootViewController as? UITabBarController
+//        let intialVC = tabBarController!.viewControllers![0] as! UIViewController
+//        let navVC = intialVC.viewcontrollers[0] as! UINavigationController
+//        let tableVC = navVC.viewControllers[0] as! LandmarksTableVC
+//        tableVC.listingList = listingsList
+//        tableVC.mapVC = mapVC
         
         return true
     }
@@ -34,33 +46,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func loadData() {
         do{
-//            let plistPath = Bundle.main.path(forResource: "data", ofType: "plist")!
-//            let data = try Data(contentsOf: URL(fileURLWithPath: plistPath))
-//            let tempDict = try PropertyListSerialization.propertyList(from: data, format: nil) as! [String:Any]
-//            print("\(tempDict)")
-//            let tempArray = tempDict["parks"]! as! Array<[String:Any]>
+            ref =  Database.database().reference().child("Housing").child("Postings")
             
-//            for dict in tempArray {
-//                let parkName = dict["parkName"]! as! String
-//                let parkLocation = dict["parkLocation"]! as! String
-//                let latitude = Double(dict["latitude"]! as! String)!
-//                let longitude = Double(dict["longitude"]! as! String)!
-//                let location = CLLocation(latitude: latitude, longitude: longitude)
-//                let link = dict["link"]! as! String
-//                let imageType = dict["imageType"]! as! String
-//                let imageSize = dict["imageSize"]! as! String
-//                let imageName = dict["imageName"]! as! String
-//                let imageLink = dict["imageLink"]! as! String
-//
-//                let description = dict["description"]! as! String
-//                let dateFormed = dict["dateFormed"]! as! String
-//                let area = dict["area"]! as! String
-//
-//                let p = Park(parkName: parkName, parkLocation: parkLocation, dateFormed: dateFormed, area: area, link: link, location: location, imageLink: imageLink, parkDescription: description, imageName: imageName, imageSize: imageSize, imageType: imageType)
-//
-//                parks.append(p)
-//
-//            }
+            ref.observe(DataEventType.value, with: {(snapshot) in
+                if snapshot.childrenCount > 0{
+                    for listgns in snapshot.children.allObjects as! [DataSnapshot]{
+                        let lstngObject = listgns.value as? [String: AnyObject]
+                        
+                        let area = lstngObject?["Area"] as! String
+                        let bath = lstngObject?["Bath"] as! String
+                        let bed = lstngObject?["Bed"] as! String
+                        let houseDescription = lstngObject?["description"] as! String
+                        let dishwasher = lstngObject?["dishwasher"] as! String
+                        let foodpreference = lstngObject?["foodpreference"] as! String
+                        let furnished = lstngObject?["furnished"] as! String
+                        let houseid = lstngObject?["id"] as! String
+                        let multifamily = lstngObject?["multifamily"] as! String
+                        let name = lstngObject?["name"] as! String
+                        let place = lstngObject?["place"] as! String
+                        let zipcode = lstngObject?["zip"] as! String
+                        let oven = lstngObject?["oven"] as! String
+                        let petfriendly = lstngObject?["petfriendly"] as! String
+                        let pic = lstngObject?["pic"] as! String
+                        let rate = lstngObject?["rate"] as! String
+                        let type = lstngObject?["type"]as! String
+                        let user = lstngObject?["user"] as! String
+                        let washerdryer = lstngObject?["washerdryer"] as! String
+                        
+                        let l = Listing(area: area, bath: bath, bed: bed, houseDescription: houseDescription, dishwasher: dishwasher, foodpreference: foodpreference, furnished: furnished, houseid: houseid, multifamily: multifamily, name: name, place: place, zipcode: zipcode, oven: oven, petfriendly: petfriendly, pic: pic, rate: rate, type: type, user: user, washerdryer: washerdryer)
+                        
+                        self.listOfListings.append(l)
+                    }
+                }
+            })
+
         }
         catch{
             print(error)
