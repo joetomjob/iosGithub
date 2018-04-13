@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -198,11 +198,10 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="QeR-Ic-k9l"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Country" image="public.png" id="N4Z-eR-a3K"/>
+                    <tabBarItem key="tabBarItem" title="Country" image="public.png" selectedImage="public.png" id="N4Z-eR-a3K"/>
                     <connections>
                         <outlet property="countrytext" destination="cee-UW-3O7" id="luf-zc-7mK"/>
                         <outlet property="universitytext" destination="jrg-Zd-RrQ" id="dyM-h4-dkn"/>
-                        <segue destination="4OM-bi-CUt" kind="show" identifier="ListngSugue" id="shx-35-feZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xlz-dM-Ez9" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -263,18 +262,17 @@
                     <navigationItem key="navigationItem" title="Listings" id="Tv4-OU-Jtn"/>
                     <connections>
                         <outlet property="tableV" destination="iT8-Re-mGc" id="tUC-J0-ddc"/>
-                        <outlet property="tableView" destination="iT8-Re-mGc" id="sA3-Rl-zKx"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ofW-wa-mC9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1784.5" y="963.5"/>
+            <point key="canvasLocation" x="1938" y="826"/>
         </scene>
-        <!--Item-->
+        <!--Listings-->
         <scene sceneID="gZn-G8-GgY">
             <objects>
                 <navigationController id="4OM-bi-CUt" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="Q0m-SC-qyy"/>
+                    <tabBarItem key="tabBarItem" title="Listings" id="Q0m-SC-qyy"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="7Ap-sf-yEK">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -292,7 +290,4 @@
         <image name="globe.png" width="512" height="512"/>
         <image name="public.png" width="24" height="24"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="FqM-AC-pDF"/>
-    </inferredMetricsTieBreakers>
 </document>

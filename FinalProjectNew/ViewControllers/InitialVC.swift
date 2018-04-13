@@ -36,7 +36,8 @@ class InitialVC: UIViewController, CLLocationManagerDelegate {
     }
     
     @IBAction func Search(_ sender: Any) {
-        self.performSegue(withIdentifier: "ListngSugue", sender: nil)
+        self.tabBarController?.selectedIndex = 2;
+//        self.performSegue(withIdentifier: "ListngSugue", sender: nil)
     }
     override func viewDidLoad() {
         super.viewDidLoad()

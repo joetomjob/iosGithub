@@ -14,6 +14,10 @@ class ListingTableVC: UITableViewController {
 
     @IBOutlet var tableV: UITableView!
     
+    @IBAction func BacktoSearch(){
+        
+    }
+    
     var listingList = Listings()
     var listings : [Listing] { //front end for LandmarkList model object
         get {
