@@ -262,7 +262,6 @@
                     <navigationItem key="navigationItem" title="Listings" id="Tv4-OU-Jtn"/>
                     <connections>
                         <outlet property="tableV" destination="iT8-Re-mGc" id="tUC-J0-ddc"/>
-                        <outlet property="tableView" destination="iT8-Re-mGc" id="sA3-Rl-zKx"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ofW-wa-mC9" userLabel="First Responder" sceneMemberID="firstResponder"/>
