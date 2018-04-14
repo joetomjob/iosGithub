@@ -13,10 +13,13 @@ import FirebaseDatabase
 
 class PostingVC: UIViewController {
    
-   @IBOutlet weak var ad: UITextField!
+    @IBOutlet weak var name: UITextField!
+    @IBOutlet weak var ad: UITextField!
     
     
-  
+    @IBOutlet weak var multifamily: UITextField!
+    
+    @IBOutlet weak var pic: UITextField!
     
     @IBOutlet weak var pl: UITextField!
     
@@ -58,16 +61,19 @@ class PostingVC: UIViewController {
     @IBOutlet weak var dw: UITextField!
     
     
-    @IBOutlet weak var oven: UITextField!
+    @IBOutlet weak var loc: UITextField!
+ //   @IBOutlet weak var oven: UITextField!
     
-    @IBAction func post(_ sender: UIButton) {
+   
+    @IBAction func cont(_ sender: UIButton) {
         
-        postData()
+         performSegue(withIdentifier: "segueonetotwo", sender: self)
     }
     
-    var ref : DatabaseReference!
-   
-    var databaseHandle: DatabaseHandle?
+    
+//    var ref : DatabaseReference!
+//
+//    var databaseHandle: DatabaseHandle?
     override func viewDidLoad() {
         super.viewDidLoad()
        
@@ -75,49 +81,105 @@ class PostingVC: UIViewController {
 
         // Do any additional setup after loading the view.
     }
-    func postData()
-    {
-        
-        var availDate=ad.text
-        var placet=pl.text
-        var ratet=rate.text
-        var typet=type.text
-        var desct=desc.text
-        var usert=user.text
-        var bedt=bed.text
-        var batht=bath.text
-        var areat=area.text
-        var furnishedt = furnished.text
-        var wdt=wd.text
-        var dwt=dw.text
-        var ovent=oven.text
-        
-        
-        
-        
-        do{
-            ref =  Database.database().reference().child("Housing").child("Postings")
-            let key = ref.childByAutoId().key
-            
-            //creating artist with the given values
-            let post = ["id":key,
-                          "Area": area.text! as String,
-                          "Rate": rate.text! as String
-            ]
-            
-            //adding the artist inside the generated unique key
-            ref.child(key).setValue(post)
-            
-            //displaying message
-        }
-        
-        
-        
-    }
+//    func postData()
+//    {
+//        
+//        var availDate=ad.text
+//        var placet=pl.text
+//        var ratet=rate.text
+//        var typet=type.text
+//        var desct=desc.text
+//        var usert=user.text
+//        var bedt=bed.text
+//        var batht=bath.text
+//        var areat=area.text
+//        var furnishedt = furnished.text
+//        var wdt=wd.text
+//        var dwt=dw.text
+//       var ovent=oven.text
+//        var namet=name.text
+//        var pict=pic.text
+//        var zipt=zip.text
+//        var mft=multifamily.text
+//        var pft=pf.text
+//        var fpt=fp.text
+//
+//        
+//        
+//        
+//        
+//            ref =  Database.database().reference().child("Housing").child("Postings")
+//            
+//            ref.observeSingleEvent(of: .value, with: {(snapshot) in
+//                let key=String(snapshot.childrenCount)
+//            //let key = ref.childByAutoId().key
+//            
+//            //creating artist with the given values
+//            let post = [
+//                      
+//                "user":usert! as String,
+//                "description" :desct! as String,
+//                "id" : key,
+//                "name" : namet! as String,
+//                "pic" : pict! as String,
+//                "place" : placet! as String,
+//                "rate" : ratet! as String,
+//                "type" : typet! as String,
+//                "zip": zipt! as String,
+//                "Bed":bedt! as String,
+//                "Bath":batht! as String,
+//                "Area":areat! as String,
+//                "washerdryer":wdt! as String,
+//                "multifamily":mft! as String,
+//                "petfriendly":pft! as String,
+//                "foodpreference":fpt! as String,
+//                "furnished":furnishedt! as String,
+//                "dishwasher":dwt! as String,
+////                "oven":ovent! as String
+//            ]
+//            
+//            //adding the artist inside the generated unique key
+//                self.ref.child(key).setValue(post)
+//            
+//            //displaying message
+//            })
+//        
+//            
+//        
+//        
+//        
+//    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
+    {
+        let secondController = segue.destination as! postingVC2
+        
+        secondController.availDate=ad.text!
+        secondController.placet=pl.text!
+        secondController.ratet=rate.text!
+        secondController.typet=type.text!
+        secondController.desct=desc.text!
+        secondController.usert=user.text!
+        secondController.bedt=bed.text!
+        secondController.batht=bath.text!
+        secondController.areat=area.text!
+        secondController.furnishedt = furnished.text!
+        secondController.wdt=wd.text!
+        secondController.dwt=dw.text!
+        //        var ovent=oven.text
+        secondController.namet=name.text!
+        secondController.pict=pic.text!
+        secondController.zipt=zip.text!
+        secondController.mft=multifamily.text!
+        secondController.pft=pf.text!
+        secondController.fpt=fp.text!
+
+        
+        
     }
     
 
