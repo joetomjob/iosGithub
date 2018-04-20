@@ -22,6 +22,7 @@
 		9AA4AF6B207738FD00EA1378 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA4AF6A207738FD00EA1378 /* LoginViewController.swift */; };
 		9AD62FE02078583A0020A22F /* globe.png in Resources */ = {isa = PBXBuildFile; fileRef = 9AD62FDF2078583A0020A22F /* globe.png */; };
 		9AD62FE2207859AA0020A22F /* InitialVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD62FE1207859AA0020A22F /* InitialVC.swift */; };
+		FA1258D320815C8600EC2A0C /* postingVC2.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1258D220815C8600EC2A0C /* postingVC2.swift */; };
 		FA23DC3320805AAB006204B0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA23DC3220805AAB006204B0 /* Main.storyboard */; };
 		FA23DC35208060C6006204B0 /* PostingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA23DC34208060C6006204B0 /* PostingVC.swift */; };
 /* End PBXBuildFile section */
@@ -46,6 +47,7 @@
 		9AA4AF6A207738FD00EA1378 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		9AD62FDF2078583A0020A22F /* globe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = globe.png; sourceTree = "<group>"; };
 		9AD62FE1207859AA0020A22F /* InitialVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialVC.swift; sourceTree = "<group>"; };
+		FA1258D220815C8600EC2A0C /* postingVC2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = postingVC2.swift; sourceTree = "<group>"; };
 		FA23DC3220805AAB006204B0 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		FA23DC34208060C6006204B0 /* PostingVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostingVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -135,6 +137,7 @@
 				9AD62FE1207859AA0020A22F /* InitialVC.swift */,
 				9A51CF77207AFC1900F5AFE6 /* ListingTableVC.swift */,
 				9A49A41D207C66BD00BBFD9E /* ListingDetailVC.swift */,
+				FA1258D220815C8600EC2A0C /* postingVC2.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -311,6 +314,7 @@
 				FA23DC35208060C6006204B0 /* PostingVC.swift in Sources */,
 				9AA4AF6B207738FD00EA1378 /* LoginViewController.swift in Sources */,
 				9A49A41E207C66BD00BBFD9E /* ListingDetailVC.swift in Sources */,
+				FA1258D320815C8600EC2A0C /* postingVC2.swift in Sources */,
 				9A51CF7B207AFCB700F5AFE6 /* Listing.swift in Sources */,
 				9A51CF78207AFC1900F5AFE6 /* ListingTableVC.swift in Sources */,
 				9A51CF7D207AFCC900F5AFE6 /* Listings.swift in Sources */,
