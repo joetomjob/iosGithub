@@ -9,9 +9,10 @@
 import UIKit
 import Firebase
 import FirebaseDatabase
+import CoreLocation
 
 class ListingTableVC: UITableViewController {
-
+    
     @IBOutlet var tableV: UITableView!
     
     @IBAction func BacktoSearch(){
@@ -80,14 +81,14 @@ class ListingTableVC: UITableViewController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    /*override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let listing = listings[indexPath.row]
         let detailVC = ListingDetailVC(style: .grouped)
         detailVC.title = listing.title
         detailVC.listing = listing
 //        detailVC.delegate = mapVC
         navigationController?.pushViewController(detailVC, animated: true)
-    }
+    }*/
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -133,6 +134,17 @@ class ListingTableVC: UITableViewController {
     }
     */
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        let indexPath = tableView.indexPathForSelectedRow
+        let listingDetailVC  = segue.destination as! ListingDetailVC
+        let listing = listings[indexPath!.row]
+        listingDetailVC.title = listing.getName()
+        listingDetailVC.listing = listing
+        
+    }
+    
     func loadData() {
         do{
             ref =  Database.database().reference().child("Housing").child("Postings")
@@ -161,8 +173,9 @@ class ListingTableVC: UITableViewController {
                         let type = lstngObject?["type"]as! String
                         let user = lstngObject?["user"] as! String
                         let washerdryer = lstngObject?["washerdryer"] as! String
+                        let imageName = lstngObject?["imageName"] as! String
                         
-                        let l = Listing(area: area, bath: bath, bed: bed, houseDescription: houseDescription, dishwasher: dishwasher, foodpreference: foodpreference, furnished: furnished, houseid: houseid, multifamily: multifamily, name: name, place: place, zipcode: zipcode, oven: oven, petfriendly: petfriendly, pic: pic, rate: rate, type: type, user: user, washerdryer: washerdryer)
+                        let l = Listing(area: area, bath: bath, bed: bed, houseDescription: houseDescription, dishwasher: dishwasher, foodpreference: foodpreference, furnished: furnished, houseid: houseid, multifamily: multifamily, name: name, place: place, zipcode: zipcode, oven: oven, petfriendly: petfriendly, pic: pic, rate: rate, type: type, user: user, washerdryer: washerdryer, imageName: imageName)
                         
                         self.listingList.listings.append(l)
                     }
