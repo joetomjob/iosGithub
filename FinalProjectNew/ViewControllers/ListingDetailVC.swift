@@ -11,11 +11,12 @@ import ImageSlideshow
 import CoreLocation
 import MapKit
 import Contacts
+import MessageUI
 
 protocol ZoomingProtocol {
     func zoomOn(annotation:MKAnnotation)
 }
-class ListingDetailVC: UITableViewController, MKMapViewDelegate, CLLocationManagerDelegate, ZoomingProtocol {
+class ListingDetailVC: UITableViewController, MKMapViewDelegate, CLLocationManagerDelegate, ZoomingProtocol, MFMessageComposeViewControllerDelegate, MFMailComposeViewControllerDelegate {
     
     var locationManager:CLLocationManager?
     var location : CLLocation?
@@ -44,6 +45,8 @@ class ListingDetailVC: UITableViewController, MKMapViewDelegate, CLLocationManag
     let MULTIFAMILY     = 15
     let OVEN            = 16
     let PETFRIENDLY     = 17
+    let CONTACT         = 18
+    let EMAIL           = 19
     
 //    @IBOutlet weak var listingImage: UIView!
     
@@ -66,8 +69,44 @@ class ListingDetailVC: UITableViewController, MKMapViewDelegate, CLLocationManag
     @IBOutlet weak var listingOven: UITableViewCell!
     @IBOutlet weak var listingPetFriendly: UITableViewCell!
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var contactNumber: UILabel!
+    @IBOutlet weak var emailId: UILabel!
     //    @IBOutlet weak var slideShow: ImageSlideshow!
     
+    @IBAction func callUser(_ sender: Any) {
+        if let phoneCallURL = URL(string: "tel://\(listing.getContact())") {
+            
+            let application:UIApplication = UIApplication.shared
+            if (application.canOpenURL(phoneCallURL)) {
+                application.open(phoneCallURL, options: [:], completionHandler: nil)
+            }
+        }
+    }
+    
+    @IBAction func smsUser(_ sender: Any) {
+        if (MFMessageComposeViewController.canSendText()) {
+            let controller = MFMessageComposeViewController()
+            controller.body = "Hi \(listing.getUser()), I saw your lising in the Housing app. When will be a good time to see the place?"
+            controller.recipients = [listing.getContact()]
+            controller.messageComposeDelegate = self
+            self.present(controller, animated: true, completion: nil)
+        }
+    }
+    
+    @IBAction func emailUser(_ sender: Any) {
+        if (MFMailComposeViewController.canSendMail()) {
+            let composeVC = MFMailComposeViewController()
+            composeVC.mailComposeDelegate = self
+            
+            // Configure the fields of the interface.
+            composeVC.setToRecipients([listing.getEmail()])
+            composeVC.setSubject("Enquiry about Housing: \(listing.getName())")
+            composeVC.setMessageBody("Hi \(listing.getUser())! I saw your lising in the Housing app. When will be a good time to see the place?", isHTML: false)
+            
+            // Present the view controller modally.
+            self.present(composeVC, animated: true, completion: nil)
+        }
+    }
     func zoomOn(annotation: MKAnnotation){
         tabBarController?.selectedViewController = self
         let region = MKCoordinateRegionMakeWithDistance(annotation.coordinate, 250, 250)
@@ -162,7 +201,8 @@ class ListingDetailVC: UITableViewController, MKMapViewDelegate, CLLocationManag
         listingPetFriendly.textLabel?.font = UIFont(name: "Arial", size: 11)
         listingPetFriendly.detailTextLabel?.text = listing.getPetFriendly()
         listingPetFriendly.detailTextLabel?.font = UIFont(name: "Arial", size: 17)
-        
+        contactNumber.text = listing.getContact()
+        emailId.text = listing.getEmail()
         
         if CLLocationManager.locationServicesEnabled(){
             locationManager?.requestAlwaysAuthorization()
@@ -202,7 +242,7 @@ class ListingDetailVC: UITableViewController, MKMapViewDelegate, CLLocationManag
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 19
+        return 21
     }
     
     func showMap(){
@@ -291,6 +331,18 @@ class ListingDetailVC: UITableViewController, MKMapViewDelegate, CLLocationManag
         locationManager?.stopUpdatingLocation()
     }
 
+    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController,
+                               didFinishWith result: MFMailComposeResult, error: Error?) {
+        // Check the result or perform other tasks.
+        
+        // Dismiss the mail compose view controller.
+        controller.dismiss(animated: true, completion: nil)
+    }
+  
     
 //    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 //        return 44.0

@@ -40,6 +40,8 @@ class Listing: NSObject, MKAnnotation {
     private var user : String = ""
     private var washerdryer : String = ""
     private var imageName : String = ""
+    private var contact : String = ""
+    private var email : String = ""
     
     //optional - required with set callout true
     var title : String? {
@@ -77,11 +79,13 @@ class Listing: NSObject, MKAnnotation {
         user: \(user)
         washerdryer: \(washerdryer)
         imageName: \(imageName)
+        contact: \(contact)
+        email: \(email)
         }
         """
     }
     
-    init(area: String, bath: String, bed: String, houseDescription: String, dishwasher: String, foodpreference: String, furnished: String, houseid: String, multifamily: String, name: String, place: String, zipcode: String, oven: String, petfriendly: String, pic: String, rate: String, type: String, user: String, washerdryer: String, imageName: String){
+    init(area: String, bath: String, bed: String, houseDescription: String, dishwasher: String, foodpreference: String, furnished: String, houseid: String, multifamily: String, name: String, place: String, zipcode: String, oven: String, petfriendly: String, pic: String, rate: String, type: String, user: String, washerdryer: String, imageName: String, contact: String, email: String){
         super.init()
         self.set(name: houseid)
         self.setArea(area: area)
@@ -103,12 +107,14 @@ class Listing: NSObject, MKAnnotation {
         self.setUser(user: user)
         self.setWasherDryer(washerdryer: washerdryer)
         self.setImageName(imageName: imageName)
+        self.setContact(contact: contact)
+        self.setEmail(email: email)
         
         
     }
     
     override convenience init () {
-        self.init(area: "Unknown", bath: "Unknown", bed: "Unknown", houseDescription: "Unknown", dishwasher: "Unknown", foodpreference: "Unknown", furnished: "Unknown", houseid: "Unknown", multifamily: "Unknown", name: "Unknown", place: "Unknown", zipcode: "Unknown", oven: "Unknown", petfriendly: "Unknown", pic: "Unknown", rate: "Unknown", type: "Unknown", user: "Unknown", washerdryer: "Unknown", imageName: "Unknown")
+        self.init(area: "Unknown", bath: "Unknown", bed: "Unknown", houseDescription: "Unknown", dishwasher: "Unknown", foodpreference: "Unknown", furnished: "Unknown", houseid: "Unknown", multifamily: "Unknown", name: "Unknown", place: "Unknown", zipcode: "Unknown", oven: "Unknown", petfriendly: "Unknown", pic: "Unknown", rate: "Unknown", type: "Unknown", user: "Unknown", washerdryer: "Unknown", imageName: "Unknown", contact: "Unknown", email: "Unknown")
     }
     
     //getter and setter for ParkName
@@ -269,6 +275,22 @@ class Listing: NSObject, MKAnnotation {
     }
     func setImageName(imageName: String){
         self.imageName = imageName
+    }
+    
+    //getter and setter for contact
+    func getContact() -> String {
+        return contact
+    }
+    func setContact(contact: String){
+        self.contact = contact
+    }
+    
+    //getter and setter for email
+    func getEmail() -> String {
+        return email
+    }
+    func setEmail(email: String){
+        self.email = email
     }
     
     //getter and setter for Locations

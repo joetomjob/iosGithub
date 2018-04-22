@@ -190,12 +190,14 @@ class ListingTableVC: UITableViewController {
                         let user = lstngObject?["user"] as! String
                         let washerdryer = lstngObject?["washerdryer"] as! String
                         let imageName = lstngObject?["imageName"] as! String
+                        let contact = lstngObject?["contact"] as! String
+                        let email = lstngObject?["email"] as! String
                         
                         let geocoder = CLGeocoder()
                         let fullNameArr = place.components(separatedBy: ",")
                         let addressString = "\(name)\(fullNameArr[0])\(zipcode)"
                         
-                        let l = Listing(area: area, bath: bath, bed: bed, houseDescription: houseDescription, dishwasher: dishwasher, foodpreference: foodpreference, furnished: furnished, houseid: houseid, multifamily: multifamily, name: name, place: place, zipcode: zipcode, oven: oven, petfriendly: petfriendly, pic: pic, rate: rate, type: type, user: user, washerdryer: washerdryer, imageName: imageName)
+                        let l = Listing(area: area, bath: bath, bed: bed, houseDescription: houseDescription, dishwasher: dishwasher, foodpreference: foodpreference, furnished: furnished, houseid: houseid, multifamily: multifamily, name: name, place: place, zipcode: zipcode, oven: oven, petfriendly: petfriendly, pic: pic, rate: rate, type: type, user: user, washerdryer: washerdryer, imageName: imageName, contact: contact, email: email)
                         
                         geocoder.geocodeAddressString(addressString) { (placemarks:[CLPlacemark]?, error:Error?) in
                             if let placemark = placemarks?[0]{

@@ -17,6 +17,7 @@
 		9A3DA91E208C37F50040F9EC /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A3DA91D208C37F40040F9EC /* AddressBook.framework */; };
 		9A3DA924208C3FEA0040F9EC /* waypointmp.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A3DA923208C3FEA0040F9EC /* waypointmp.png */; };
 		9A3DA926208C40490040F9EC /* MapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3DA925208C40490040F9EC /* MapVC.swift */; };
+		9A3DA928208CDD680040F9EC /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A3DA927208CDD680040F9EC /* MessageUI.framework */; };
 		9A49A41E207C66BD00BBFD9E /* ListingDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A49A41D207C66BD00BBFD9E /* ListingDetailVC.swift */; };
 		9A51CF78207AFC1900F5AFE6 /* ListingTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A51CF77207AFC1900F5AFE6 /* ListingTableVC.swift */; };
 		9A51CF7B207AFCB700F5AFE6 /* Listing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A51CF7A207AFCB700F5AFE6 /* Listing.swift */; };
@@ -47,6 +48,7 @@
 		9A3DA91D208C37F40040F9EC /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		9A3DA923208C3FEA0040F9EC /* waypointmp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = waypointmp.png; sourceTree = "<group>"; };
 		9A3DA925208C40490040F9EC /* MapVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVC.swift; sourceTree = "<group>"; };
+		9A3DA927208CDD680040F9EC /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		9A49A41D207C66BD00BBFD9E /* ListingDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingDetailVC.swift; sourceTree = "<group>"; };
 		9A51CF77207AFC1900F5AFE6 /* ListingTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingTableVC.swift; sourceTree = "<group>"; };
 		9A51CF7A207AFCB700F5AFE6 /* Listing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Listing.swift; sourceTree = "<group>"; };
@@ -67,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A3DA928208CDD680040F9EC /* MessageUI.framework in Frameworks */,
 				9A3DA91E208C37F50040F9EC /* AddressBook.framework in Frameworks */,
 				9A51CF81207B002F00F5AFE6 /* MapKit.framework in Frameworks */,
 				9A51CF7F207B002800F5AFE6 /* CoreLocation.framework in Frameworks */,
@@ -89,6 +92,7 @@
 		3A0EB67C4F2561A3863E8C81 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9A3DA927208CDD680040F9EC /* MessageUI.framework */,
 				9A3DA91D208C37F40040F9EC /* AddressBook.framework */,
 				9A51CF80207B002E00F5AFE6 /* MapKit.framework */,
 				9A51CF7E207B002800F5AFE6 /* CoreLocation.framework */,
