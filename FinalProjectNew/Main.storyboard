@@ -502,10 +502,6 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="globe.png" translatesAutoresizingMaskIntoConstraints="NO" id="zsD-di-Ur2">
-                                        <rect key="frame" x="138" y="37" width="98" height="100"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="University" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gu6-an-i02">
                                         <rect key="frame" x="25" y="289" width="77" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -533,6 +529,10 @@
                                             <action selector="Search:" destination="lvv-jp-HYU" eventType="touchUpInside" id="J8d-RK-sIs"/>
                                         </connections>
                                     </button>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="housecolor" translatesAutoresizingMaskIntoConstraints="NO" id="zsD-di-Ur2">
+                                        <rect key="frame" x="151" y="37" width="98" height="100"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.81974923850000003" green="0.88227774979999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </view>
@@ -590,7 +590,7 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hra-Ya-aOu">
                                             <rect key="frame" x="16" y="50" width="201" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -1225,12 +1225,12 @@
         </scene>
     </scenes>
     <resources>
-        <image name="globe.png" width="512" height="512"/>
         <image name="globe1" width="26" height="26"/>
         <image name="house" width="26" height="26"/>
+        <image name="housecolor" width="512" height="512"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="11T-ez-ZNI"/>
-        <segue reference="FqM-AC-pDF"/>
+        <segue reference="shx-35-feZ"/>
     </inferredMetricsTieBreakers>
 </document>

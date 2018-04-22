@@ -10,6 +10,7 @@ import UIKit
 import Firebase
 import FirebaseDatabase
 import CoreLocation
+import MapKit
 
 extension UIImageView {
     func downloadImageFrom(link:String, contentMode: UIViewContentMode) {
@@ -23,13 +24,16 @@ extension UIImageView {
     }
 }
 
-class ListingTableVC: UITableViewController {
+class ListingTableVC: UITableViewController,CLLocationManagerDelegate {
     
     @IBOutlet var tableV: UITableView!
     
-    @IBAction func BacktoSearch(){
-        
-    }
+    var locationManager:CLLocationManager?
+    var location : CLLocation?
+    var geodocoder = CLGeocoder()
+    var placemark:CLLocation?
+    let point = MKPointAnnotation()
+    var distaceFromCurrentLocation: Double = 15.0
     
     var listingList = Listings()
     var listings : [Listing] { //front end for LandmarkList model object
@@ -41,6 +45,16 @@ class ListingTableVC: UITableViewController {
         }
     }
     
+    var listingListNear = Listings()
+    var listingsNear : [Listing] { //front end for LandmarkList model object
+        get {
+            return self.listingListNear.listings
+        }
+        set(val) {
+            self.listingListNear.listings = val
+        }
+    }
+    
     var ref : DatabaseReference!
     var databaseHandle: DatabaseHandle?
     var coords: CLLocationCoordinate2D!
@@ -49,7 +63,22 @@ class ListingTableVC: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if CLLocationManager.locationServicesEnabled(){
+            locationManager?.requestAlwaysAuthorization()
+        }
+        locationManager?.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager?.startUpdatingLocation()
+        locationManager?.delegate = self
+        
         loadData()
+        
+//        for listing in listingList.listings {
+//            if listing.getDistance() < distaceFromCurrentLocation{
+//                self.listingsNear.append(listing)
+//            }
+//        }
+    
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -76,6 +105,7 @@ class ListingTableVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
+        
         return listings.count
     }
     
@@ -85,7 +115,7 @@ class ListingTableVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell:ListingCell = tableView.dequeueReusableCell(withIdentifier: "ListingCell", for: indexPath) as! ListingCell
+        var cell:ListingCell = tableView.dequeueReusableCell(withIdentifier: "ListingCell", for: indexPath) as! ListingCell
 
         // Configure the cell...
         let listing = listings[indexPath.row]
@@ -94,6 +124,7 @@ class ListingTableVC: UITableViewController {
         cell.listingRate.text = listing.getRate()
         cell.listingImage?.downloadImageFrom(link: listing.getImageName(), contentMode: UIViewContentMode.scaleAspectFill)
         cell.accessoryType = .disclosureIndicator
+        
         return cell
     }
     
@@ -161,6 +192,27 @@ class ListingTableVC: UITableViewController {
         
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        locationManager = CLLocationManager()
+        if CLLocationManager.locationServicesEnabled()
+        {
+            locationManager!.requestWhenInUseAuthorization()
+        }
+        super.init(coder : aDecoder)
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        location = locations.last
+        print("\(String(describing:location))")
+        
+        //add the current location to the mapView
+        point.coordinate = (location?.coordinate)!
+        
+        print("\(String(describing: location))")
+        locationManager?.stopUpdatingLocation()
+
+    }
+    
     func loadData() {
         do{
             ref =  Database.database().reference().child("Housing").child("Postings")
@@ -206,10 +258,19 @@ class ListingTableVC: UITableViewController {
                                     self.cllocationoflisting =  CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
 //                                    setLocation(location: self.cllocationoflisting)
                                     l.setLocation(location: self.cllocationoflisting)
+                                    
+                                    let distanceInMeters = self.location?.distance(from: l.getLocation()!)
+                                    let distanceInMiles = distanceInMeters! * 0.00062137
+                                    l.setDistance(distance: distanceInMiles)
+                                    
+                                    if(distanceInMiles < self.distaceFromCurrentLocation){
+                                        self.listingListNear.listings.append(l)
+                                    }
                                     //                    self.showMap()
                                 }
                             }
                         }
+                        
                         
                         self.listingList.listings.append(l)
                     }

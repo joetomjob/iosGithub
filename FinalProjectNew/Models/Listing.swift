@@ -42,6 +42,7 @@ class Listing: NSObject, MKAnnotation {
     private var imageName : String = ""
     private var contact : String = ""
     private var email : String = ""
+    private var distance : Double = 0.0
     
     //optional - required with set callout true
     var title : String? {
@@ -109,7 +110,6 @@ class Listing: NSObject, MKAnnotation {
         self.setImageName(imageName: imageName)
         self.setContact(contact: contact)
         self.setEmail(email: email)
-        
         
     }
     
@@ -291,6 +291,14 @@ class Listing: NSObject, MKAnnotation {
     }
     func setEmail(email: String){
         self.email = email
+    }
+    
+    //getter and setter for distance
+    func getDistance() -> Double {
+        return distance
+    }
+    func setDistance(distance: Double){
+        self.distance = distance
     }
     
     //getter and setter for Locations

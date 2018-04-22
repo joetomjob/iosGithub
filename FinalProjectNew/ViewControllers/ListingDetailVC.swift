@@ -213,9 +213,11 @@ class ListingDetailVC: UITableViewController, MKMapViewDelegate, CLLocationManag
         
         mapView.delegate = self
         
+        if listing.getLocation() != nil{
         let mkCoordinateRegion =
             MKCoordinateRegionMakeWithDistance((listing.getLocation()?.coordinate)!,500,500)
-        mapView.setRegion(mkCoordinateRegion, animated: true)
+            mapView.setRegion(mkCoordinateRegion, animated: true)
+        }
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
