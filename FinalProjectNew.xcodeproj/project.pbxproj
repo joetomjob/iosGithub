@@ -14,6 +14,9 @@
 		9A0658DD2075CCDF007C976C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9A0658DC2075CCDF007C976C /* GoogleService-Info.plist */; };
 		9A2BDF37207D732C006C6A37 /* ListingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2BDF36207D732C006C6A37 /* ListingCell.swift */; };
 		9A3D74FE208B27F100BBC73A /* house.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A3D74FD208B27F100BBC73A /* house.png */; };
+		9A3DA91E208C37F50040F9EC /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A3DA91D208C37F40040F9EC /* AddressBook.framework */; };
+		9A3DA924208C3FEA0040F9EC /* waypointmp.png in Resources */ = {isa = PBXBuildFile; fileRef = 9A3DA923208C3FEA0040F9EC /* waypointmp.png */; };
+		9A3DA926208C40490040F9EC /* MapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A3DA925208C40490040F9EC /* MapVC.swift */; };
 		9A49A41E207C66BD00BBFD9E /* ListingDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A49A41D207C66BD00BBFD9E /* ListingDetailVC.swift */; };
 		9A51CF78207AFC1900F5AFE6 /* ListingTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A51CF77207AFC1900F5AFE6 /* ListingTableVC.swift */; };
 		9A51CF7B207AFCB700F5AFE6 /* Listing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A51CF7A207AFCB700F5AFE6 /* Listing.swift */; };
@@ -41,6 +44,9 @@
 		9A0658DC2075CCDF007C976C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9A2BDF36207D732C006C6A37 /* ListingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingCell.swift; sourceTree = "<group>"; };
 		9A3D74FD208B27F100BBC73A /* house.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = house.png; sourceTree = "<group>"; };
+		9A3DA91D208C37F40040F9EC /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		9A3DA923208C3FEA0040F9EC /* waypointmp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = waypointmp.png; sourceTree = "<group>"; };
+		9A3DA925208C40490040F9EC /* MapVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVC.swift; sourceTree = "<group>"; };
 		9A49A41D207C66BD00BBFD9E /* ListingDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingDetailVC.swift; sourceTree = "<group>"; };
 		9A51CF77207AFC1900F5AFE6 /* ListingTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingTableVC.swift; sourceTree = "<group>"; };
 		9A51CF7A207AFCB700F5AFE6 /* Listing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Listing.swift; sourceTree = "<group>"; };
@@ -61,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A3DA91E208C37F50040F9EC /* AddressBook.framework in Frameworks */,
 				9A51CF81207B002F00F5AFE6 /* MapKit.framework in Frameworks */,
 				9A51CF7F207B002800F5AFE6 /* CoreLocation.framework in Frameworks */,
 				0679622EC13B367326461CCB /* Pods_FinalProjectNew.framework in Frameworks */,
@@ -82,6 +89,7 @@
 		3A0EB67C4F2561A3863E8C81 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9A3DA91D208C37F40040F9EC /* AddressBook.framework */,
 				9A51CF80207B002E00F5AFE6 /* MapKit.framework */,
 				9A51CF7E207B002800F5AFE6 /* CoreLocation.framework */,
 				839A79834B3F5AC7F327767A /* Pods_FinalProjectNew.framework */,
@@ -142,6 +150,7 @@
 				9A51CF77207AFC1900F5AFE6 /* ListingTableVC.swift */,
 				9A49A41D207C66BD00BBFD9E /* ListingDetailVC.swift */,
 				FA1258D220815C8600EC2A0C /* postingVC2.swift */,
+				9A3DA925208C40490040F9EC /* MapVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -149,6 +158,7 @@
 		9AD62FDE2078582C0020A22F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				9A3DA923208C3FEA0040F9EC /* waypointmp.png */,
 				9A3D74FD208B27F100BBC73A /* house.png */,
 				9AA0528F208B297000CCF6EC /* globe1.png */,
 				9AD62FDF2078583A0020A22F /* globe.png */,
@@ -219,6 +229,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9AD62FE02078583A0020A22F /* globe.png in Resources */,
+				9A3DA924208C3FEA0040F9EC /* waypointmp.png in Resources */,
 				FA23DC3320805AAB006204B0 /* Main.storyboard in Resources */,
 				9A0658D52075CC58007C976C /* LaunchScreen.storyboard in Resources */,
 				9AA05290208B297000CCF6EC /* globe1.png in Resources */,
@@ -278,11 +289,14 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-FinalProjectNew/Pods-FinalProjectNew-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/AlamofireImage/AlamofireImage.framework",
 				"${BUILT_PRODUCTS_DIR}/BoringSSL/openssl.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleAPIClientForREST/GoogleAPIClientForREST.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/ImageSlideshow/ImageSlideshow.framework",
 				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC/GRPCClient.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC-Core/grpc.framework",
@@ -293,11 +307,14 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleAPIClientForREST.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ImageSlideshow.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GRPCClient.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpc.framework",
@@ -323,6 +340,7 @@
 				9AA4AF6B207738FD00EA1378 /* LoginViewController.swift in Sources */,
 				9A49A41E207C66BD00BBFD9E /* ListingDetailVC.swift in Sources */,
 				FA1258D320815C8600EC2A0C /* postingVC2.swift in Sources */,
+				9A3DA926208C40490040F9EC /* MapVC.swift in Sources */,
 				9A51CF7B207AFCB700F5AFE6 /* Listing.swift in Sources */,
 				9A51CF78207AFC1900F5AFE6 /* ListingTableVC.swift in Sources */,
 				9A51CF7D207AFCC900F5AFE6 /* Listings.swift in Sources */,

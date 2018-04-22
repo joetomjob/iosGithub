@@ -11,6 +11,18 @@ import Firebase
 import FirebaseDatabase
 import CoreLocation
 
+extension UIImageView {
+    func downloadImageFrom(link:String, contentMode: UIViewContentMode) {
+        URLSession.shared.dataTask( with: NSURL(string:link)! as URL, completionHandler: {
+            (data, response, error) -> Void in
+            DispatchQueue.main.async {
+                self.contentMode =  contentMode
+                if let data = data { self.image = UIImage(data: data) }
+            }
+        }).resume()
+    }
+}
+
 class ListingTableVC: UITableViewController {
     
     @IBOutlet var tableV: UITableView!
@@ -31,6 +43,9 @@ class ListingTableVC: UITableViewController {
     
     var ref : DatabaseReference!
     var databaseHandle: DatabaseHandle?
+    var coords: CLLocationCoordinate2D!
+    var addressDict : [String:String]!
+    var cllocationoflisting: CLLocation!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,6 +92,7 @@ class ListingTableVC: UITableViewController {
         cell.listingName.text = listing.getName()
         cell.listingPlace.text = listing.getPlace()
         cell.listingRate.text = listing.getRate()
+        cell.listingImage?.downloadImageFrom(link: listing.getImageName(), contentMode: UIViewContentMode.scaleAspectFill)
         cell.accessoryType = .disclosureIndicator
         return cell
     }
@@ -175,7 +191,23 @@ class ListingTableVC: UITableViewController {
                         let washerdryer = lstngObject?["washerdryer"] as! String
                         let imageName = lstngObject?["imageName"] as! String
                         
+                        let geocoder = CLGeocoder()
+                        let fullNameArr = place.components(separatedBy: ",")
+                        let addressString = "\(name)\(fullNameArr[0])\(zipcode)"
+                        
                         let l = Listing(area: area, bath: bath, bed: bed, houseDescription: houseDescription, dishwasher: dishwasher, foodpreference: foodpreference, furnished: furnished, houseid: houseid, multifamily: multifamily, name: name, place: place, zipcode: zipcode, oven: oven, petfriendly: petfriendly, pic: pic, rate: rate, type: type, user: user, washerdryer: washerdryer, imageName: imageName)
+                        
+                        geocoder.geocodeAddressString(addressString) { (placemarks:[CLPlacemark]?, error:Error?) in
+                            if let placemark = placemarks?[0]{
+                                if let location = placemark.location{
+                                    self.coords = location.coordinate //we need to use self because we are in a completion handler
+                                    self.cllocationoflisting =  CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+//                                    setLocation(location: self.cllocationoflisting)
+                                    l.setLocation(location: self.cllocationoflisting)
+                                    //                    self.showMap()
+                                }
+                            }
+                        }
                         
                         self.listingList.listings.append(l)
                     }

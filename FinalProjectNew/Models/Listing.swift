@@ -44,13 +44,13 @@ class Listing: NSObject, MKAnnotation {
     //optional - required with set callout true
     var title : String? {
         get {
-            return area;
+            return name;
         }
     }
     
     var subtitle : String? {
         get {
-            return area;
+            return name;
         }
     }
     
@@ -269,6 +269,14 @@ class Listing: NSObject, MKAnnotation {
     }
     func setImageName(imageName: String){
         self.imageName = imageName
+    }
+    
+    //getter and setter for Locations
+    func getLocation() -> CLLocation? {
+        return location
+    }
+    func setLocation(location: CLLocation?){
+        self.location = location
     }
 }
 
