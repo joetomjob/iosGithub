@@ -1,8 +1,8 @@
 //
-//  ListingTableVC.swift
+//  FavoritesTableVC.swift
 //  FinalProjectNew
 //
-//  Created by Joe Tom Job  on 4/8/18.
+//  Created by Joe Tom Job  on 4/23/18.
 //  Copyright © 2018 Joe Tom Job . All rights reserved.
 //
 
@@ -12,28 +12,20 @@ import FirebaseDatabase
 import CoreLocation
 import MapKit
 
-extension UIImageView {
-    func downloadImageFrom(link:String, contentMode: UIViewContentMode) {
-        URLSession.shared.dataTask( with: NSURL(string:link)! as URL, completionHandler: {
-            (data, response, error) -> Void in
-            DispatchQueue.main.async {
-                self.contentMode =  contentMode
-                if let data = data { self.image = UIImage(data: data) }
-            }
-        }).resume()
-    }
-}
+class FavoritesTableVC: UITableViewController, CLLocationManagerDelegate {
 
-class ListingTableVC: UITableViewController,CLLocationManagerDelegate {
     
     @IBOutlet var tableV: UITableView!
-    
+
     var locationManager:CLLocationManager?
     var location : CLLocation?
     var geodocoder = CLGeocoder()
     var placemark:CLLocation?
     let point = MKPointAnnotation()
     var distaceFromCurrentLocation: Double = 15.0
+    
+    var listingFav: [Listing] = []
+    var listingFavNames: [String] = []
     
     var listingList = Listings()
     var listings : [Listing] { //front end for LandmarkList model object
@@ -61,29 +53,11 @@ class ListingTableVC: UITableViewController,CLLocationManagerDelegate {
     var addressDict : [String:String]!
     var cllocationoflisting: CLLocation!
     
-    @IBAction func indexChanged(sender : UISegmentedControl) {
-        // This all works fine and it prints out the value of 3 on any click
-        
-        switch sender.selectedSegmentIndex {
-        case 0:
-            listings.sort(by: {(String($0.getRate().characters.dropLast()) as NSString).doubleValue < (String($1.getRate().characters.dropLast()) as NSString).doubleValue })
-            self.reloadData()
-        case 1:
-            listings.sort(by: {(String($0.getRate().characters.dropLast()) as NSString).doubleValue > (String($1.getRate().characters.dropLast()) as NSString).doubleValue })
-            self.reloadData()        case 2:
-            listings.sort(by: {$0.getDistance() < $1.getDistance()})
-            self.reloadData()
-        case 3:
-            listings.sort(by: {$0.getDistance() > $1.getDistance()})
-            self.reloadData()
-        default:
-            break;
-        }  //Switch
-    }
+    var array: [String]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         if CLLocationManager.locationServicesEnabled(){
             locationManager?.requestAlwaysAuthorization()
         }
@@ -91,30 +65,35 @@ class ListingTableVC: UITableViewController,CLLocationManagerDelegate {
         locationManager?.startUpdatingLocation()
         locationManager?.delegate = self
         
-        loadData()
+        let defaults = UserDefaults.standard
+        array = defaults.array(forKey: "favorites") as? [String]
+
         
-        self.reloadData()
-//        for listing in listingList.listings {
-//            if listing.getDistance() < distaceFromCurrentLocation{
-//                self.listingsNear.append(listing)
-//            }
-//        }
-    
+        loadData()
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+         self.navigationItem.rightBarButtonItem = self.editButtonItem
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        let defaults = UserDefaults.standard
+        array = defaults.array(forKey: "favorites") as? [String]
+    
+        loadData()
+    }
+
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
     
     func reloadData(){
         self.tableV.reloadData()
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     // MARK: - Table view data source
@@ -126,94 +105,26 @@ class ListingTableVC: UITableViewController,CLLocationManagerDelegate {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        
         return listings.count
     }
-    
+
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
-        return 100.0;//Choose your custom row height
+        return 88.0;//Choose your custom row height
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell:ListingCell = tableView.dequeueReusableCell(withIdentifier: "ListingCell", for: indexPath) as! ListingCell
-
+        var cell:ListingCell = tableView.dequeueReusableCell(withIdentifier: "FavoriteCell", for: indexPath) as! ListingCell
+        
         // Configure the cell...
         let listing = listings[indexPath.row]
         cell.listingName.text = listing.getName()
         cell.listingPlace.text = listing.getPlace()
         cell.listingRate.text = listing.getRate()
-        if listing.getDistance() > 0.0{
-            cell.listingDistance.text = String(format:"%f", listing.getDistance())+" miles away"
-        }
         cell.listingImage?.downloadImageFrom(link: listing.getImageName(), contentMode: UIViewContentMode.scaleAspectFill)
         cell.accessoryType = .disclosureIndicator
         
         return cell
-    }
-    
-    /*override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let listing = listings[indexPath.row]
-        let detailVC = ListingDetailVC(style: .grouped)
-        detailVC.title = listing.title
-        detailVC.listing = listing
-//        detailVC.delegate = mapVC
-        navigationController?.pushViewController(detailVC, animated: true)
-    }*/
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-        let indexPath = tableView.indexPathForSelectedRow
-        let listingDetailVC  = segue.destination as! ListingDetailVC
-        let listing = listings[indexPath!.row]
-        listingDetailVC.title = listing.getName()
-        listingDetailVC.listing = listing
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -234,7 +145,29 @@ class ListingTableVC: UITableViewController,CLLocationManagerDelegate {
         
         print("\(String(describing: location))")
         locationManager?.stopUpdatingLocation()
-
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        let indexPath = tableView.indexPathForSelectedRow
+        let listingDetailVC  = segue.destination as! ListingDetailVC
+        let listing = listings[indexPath!.row]
+        listingDetailVC.title = listing.getName()
+        listingDetailVC.listing = listing
+        
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            print("Deleted")
+            
+            self.listings.remove(at: indexPath.row)
+            self.listingFavNames.remove(at: indexPath.row)
+            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            UserDefaults.standard.set(self.listingFavNames, forKey:"favorites")
+        }
     }
     
     func loadData() {
@@ -280,7 +213,7 @@ class ListingTableVC: UITableViewController,CLLocationManagerDelegate {
                                 if let location = placemark.location{
                                     self.coords = location.coordinate //we need to use self because we are in a completion handler
                                     self.cllocationoflisting =  CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-//                                    setLocation(location: self.cllocationoflisting)
+                                    //                                    setLocation(location: self.cllocationoflisting)
                                     l.setLocation(location: self.cllocationoflisting)
                                     
                                     let distanceInMeters = self.location?.distance(from: l.getLocation()!)
@@ -296,10 +229,23 @@ class ListingTableVC: UITableViewController,CLLocationManagerDelegate {
                         }
                         
                         
-                        self.listingList.listings.append(l)
+//                        self.listingList.listings.append(l)
+                        
+                        if self.array != nil{
+                            if self.array!.contains(l.getName()) && !self.listingFavNames.contains(l.getName()) {
+                                    self.listingList.listings.append(l)
+                                    self.listingFavNames.append(l.getName())
+                                }
+                        }
+//                        else {
+//                            array = []
+//                            parksFav = []
+//                        }
+                        
+                        
                     }
-//                    self.tableVC!.listingList.listings = self.listOfListings
-//                    self.tableVC!.tableV.reloadData()
+                    //                    self.tableVC!.listingList.listings = self.listOfListings
+                    //                    self.tableVC!.tableV.reloadData()
                     self.reloadData()
                 }
             })
@@ -309,5 +255,59 @@ class ListingTableVC: UITableViewController,CLLocationManagerDelegate {
             print(error)
         }
     }
+    /*
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+
+        // Configure the cell...
+
+        return cell
+    }
+    */
+
+    /*
+    // Override to support conditional editing of the table view.
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        // Return false if you do not want the specified item to be editable.
+        return true
+    }
+    */
+
+    /*
+    // Override to support editing the table view.
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            // Delete the row from the data source
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        } else if editingStyle == .insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        }    
+    }
+    */
+
+    /*
+    // Override to support rearranging the table view.
+    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+
+    }
+    */
+
+    /*
+    // Override to support conditional rearranging of the table view.
+    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        // Return false if you do not want the item to be re-orderable.
+        return true
+    }
+    */
+
+    /*
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+    }
+    */
 
 }

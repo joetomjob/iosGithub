@@ -27,6 +27,8 @@ class ListingDetailVC: UITableViewController, MKMapViewDelegate, CLLocationManag
     var coords: CLLocationCoordinate2D!
     var addressDict : [String:String]!
     
+    var favorites: [String]?
+    
     let IMAGE           = 0
     let NAME            = 1
     let PLACE           = 2
@@ -47,6 +49,7 @@ class ListingDetailVC: UITableViewController, MKMapViewDelegate, CLLocationManag
     let PETFRIENDLY     = 17
     let CONTACT         = 18
     let EMAIL           = 19
+    let FAVORITE        = 20
     
 //    @IBOutlet weak var listingImage: UIView!
     
@@ -80,6 +83,11 @@ class ListingDetailVC: UITableViewController, MKMapViewDelegate, CLLocationManag
             if (application.canOpenURL(phoneCallURL)) {
                 application.open(phoneCallURL, options: [:], completionHandler: nil)
             }
+            else{
+                let alert = UIAlertController(title: "Device does not support call", message: "This device does not support call.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true)
+            }
         }
     }
     
@@ -90,6 +98,11 @@ class ListingDetailVC: UITableViewController, MKMapViewDelegate, CLLocationManag
             controller.recipients = [listing.getContact()]
             controller.messageComposeDelegate = self
             self.present(controller, animated: true, completion: nil)
+        }
+        else{
+            let alert = UIAlertController(title: "Device does not support messaging", message: "This device does not support messaging.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true)
         }
     }
     
@@ -106,12 +119,32 @@ class ListingDetailVC: UITableViewController, MKMapViewDelegate, CLLocationManag
             // Present the view controller modally.
             self.present(composeVC, animated: true, completion: nil)
         }
+        else{
+            let alert = UIAlertController(title: "Device does not support Email", message: "This device does not support Email.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true)
+        }
     }
     func zoomOn(annotation: MKAnnotation){
         tabBarController?.selectedViewController = self
         let region = MKCoordinateRegionMakeWithDistance(annotation.coordinate, 250, 250)
         mapView.setRegion(region, animated: true)
         mapView.selectAnnotation(annotation, animated: true)
+    }
+    @IBAction func Add_to_Favorites(_ sender: Any) {
+        if self.favorites != nil {
+            if !self.favorites!.contains(listing.getName()) {
+                self.favorites!.append(listing.getName())
+            }
+        } else {
+            self.favorites = []
+            self.favorites?.append(listing.getName())
+        }
+        
+        UserDefaults.standard.set(self.favorites, forKey:"favorites")
+        let alert = UIAlertController(title: "Added to Favorites", message: "", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -125,6 +158,9 @@ class ListingDetailVC: UITableViewController, MKMapViewDelegate, CLLocationManag
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let array = UserDefaults.standard.array(forKey: "favorites") as? [String]
+        self.favorites = array
         
         slideShow.setImageInputs([
             AlamofireSource(urlString: listing.getImageName())!,
@@ -244,7 +280,7 @@ class ListingDetailVC: UITableViewController, MKMapViewDelegate, CLLocationManag
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 21
+        return 22
     }
     
     func showMap(){

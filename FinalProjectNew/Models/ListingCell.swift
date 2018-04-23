@@ -12,5 +12,6 @@ class ListingCell: UITableViewCell {
     @IBOutlet weak var listingName: UILabel!
     @IBOutlet weak var listingPlace: UILabel!
     @IBOutlet weak var listingRate: UILabel!
+    @IBOutlet weak var listingDistance: UILabel!
     @IBOutlet weak var listingImage: UIImageView!
 }

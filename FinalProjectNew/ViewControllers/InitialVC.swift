@@ -10,6 +10,7 @@ import UIKit
 import CoreLocation
 import FirebaseDatabase
 import Firebase
+import MapKit
 
 class InitialVC: UIViewController, CLLocationManagerDelegate {
     var locationManager = CLLocationManager()
@@ -17,6 +18,22 @@ class InitialVC: UIViewController, CLLocationManagerDelegate {
     
     var geodocoder = CLGeocoder()
     var placemark:CLLocation?
+    var coords: CLLocationCoordinate2D!
+    var addressDict : [String:String]!
+    var cllocationoflisting: CLLocation!
+    let point = MKPointAnnotation()
+    
+    var max = MAXFLOAT
+    
+    var universityList = Universities()
+    var universities : [University] { //front end for LandmarkList model object
+        get {
+            return self.universityList.universities
+        }
+        set(val) {
+            self.universityList.universities = val
+        }
+    }
     
     var ref : DatabaseReference!
 
@@ -50,6 +67,8 @@ class InitialVC: UIViewController, CLLocationManagerDelegate {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.startUpdatingLocation()
         locationManager.delegate = self  //send them who the delegate is
+        
+        loadData()
         
         // Do any additional setup after loading the view.
     }
@@ -128,6 +147,66 @@ class InitialVC: UIViewController, CLLocationManagerDelegate {
             alertController.addAction(openAction)
             present(alertController, animated: true, completion: nil)
         }
+    }
+    
+    func loadData() {
+        do{
+            ref =  Database.database().reference().child("Universities")
+            
+            ref.observe(DataEventType.value, with: {(snapshot) in
+                if snapshot.childrenCount > 0{
+                    for listgns in snapshot.children.allObjects as! [DataSnapshot]{
+                        let lstngObject = listgns.value as? [String: AnyObject]
+                        
+                        let Id = lstngObject?["id"] as! String
+                        let Name = lstngObject?["Name"] as! String
+                        let State = lstngObject?["State"] as! String
+                        let City = lstngObject?["city"] as! String
+                        let Street = lstngObject?["street"] as! String
+                        let ZipCode = lstngObject?["zipcode"] as! String
+
+                        
+                        let geocoder = CLGeocoder()
+//                        let fullNameArr = place.components(separatedBy: ",")
+                        let addressString = "\(Name)\(Street)\(ZipCode)"
+                        
+                        let l = University(Id: Id, Name: Name, State: State, City: City, Street: Street, ZipCode: ZipCode)
+                        
+                        geocoder.geocodeAddressString(addressString) { (placemarks:[CLPlacemark]?, error:Error?) in
+                            if let placemark = placemarks?[0]{
+                                if let location = placemark.location{
+                                    self.coords = location.coordinate //we need to use self because we are in a completion handler
+                                    self.cllocationoflisting =  CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+                                    //                                    setLocation(location: self.cllocationoflisting)
+                                    l.setLocation(location: self.cllocationoflisting)
+                                    
+                                    let distanceInMeters = self.location?.distance(from: l.getLocation()!)
+                                    let distanceInMiles = distanceInMeters! * 0.00062137
+                                    l.setDistance(Distance: distanceInMiles)
+                                    
+                                    if Float(distanceInMiles) < self.max{
+                                        self.universitytext.text = l.getName()
+                                        self.max = Float(distanceInMiles)
+                                    }
+                                    
+                                    //                    self.showMap()
+                                }
+                            }
+                        }
+                        self.universityList.universities.append(l)
+                    }
+                    self.reloadData()
+                }
+            })
+
+        }
+        catch{
+            print(error)
+        }
+    }
+    
+    func reloadData(){
+        
     }
 
 }

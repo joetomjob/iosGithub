@@ -164,7 +164,6 @@ class MapVC: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, Zoo
     }
     */
     func showMap(){
-        
         let place = MKPlacemark(coordinate: coords, addressDictionary: addressDict)
         let mapItem = MKMapItem(placemark: place)
         let options = [MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving]
