@@ -44,6 +44,7 @@ class PostingVC: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource{
 
     
     
+    @IBOutlet weak var contact: UITextField!
     
    
     
@@ -97,7 +98,15 @@ class PostingVC: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource{
 
     override func viewDidLoad() {
         super.viewDidLoad()
-      
+        if Auth.auth().currentUser != nil {
+            // User is signed in.
+            // ...
+            user.text = (Auth.auth().currentUser?.email)! as String
+           // email.text=(Auth.auth().currentUser?.email)! as String
+        } else {
+            // No user is signed in.
+            // ...
+        }
        
 
         // Do any additional setup after loading the view.
@@ -159,7 +168,7 @@ class PostingVC: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource{
         secondController.ratet=ratelabel.text!
         secondController.typet=self.type.text!
         
-        
+        secondController.contactt=self.contact.text!
         
         secondController.desct=desc.text!
         secondController.usert=user.text!

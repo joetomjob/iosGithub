@@ -42,7 +42,8 @@ var namet=String()
     var zipt=String()
    var fpt=String()
     var loct=String()
-   
+   var contactt=String()
+    var imagename=String()
   
     @IBOutlet weak var wd: UILabel!
     
@@ -150,7 +151,10 @@ var namet=String()
     
     @IBOutlet weak var date: UILabel!
     var ref : DatabaseReference!
+    var iref : DatabaseReference!
     
+    var user=String()
+    var email=String()
     var databaseHandle: DatabaseHandle?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -200,7 +204,17 @@ let database = Database.database().reference()
         
         
         
+        
         ref =  Database.database().reference().child("Housing").child("Postings")
+        if Auth.auth().currentUser != nil {
+            // User is signed in.
+            // ...
+            user = (Auth.auth().currentUser?.email)!
+            email=(Auth.auth().currentUser?.email)!
+        } else {
+            // No user is signed in.
+            // ...
+        }
         
         ref.observeSingleEvent(of: .value, with: {(snapshot) in
             let key=String(snapshot.childrenCount)
@@ -209,11 +223,11 @@ let database = Database.database().reference()
             //creating artist with the given values
             let post = [
                 
-                "user":self.usert,
+                "user":self.user,
                 "description" :self.desct,
                 "id" : key,
                 "name" : self.namet as String,
-                "imageName" : pict as String,
+                "imageName" : self.imagename as String,
                 "place" : "\(self.loct),\(self.placet)" as String,
                 "rate" : "\(self.ratet)$" as String,
                 "type" : self.typet as String,
@@ -227,8 +241,11 @@ let database = Database.database().reference()
                 "foodpreference":self.fpt as String,
                 "furnished":furnishedt! as String,
                 "dishwasher":dwt! as String,
-                              "oven":ovent! as String
+                "contact":self.contactt as String,
+                "email":self.email,
+                "oven":ovent! as String
             ]
+            self.ref.child(key).setValue(post)
             
             let storage=Storage.storage().reference()
             let tempImgRef=storage.child("dir\(key)/\"image1.jpg")
@@ -238,6 +255,11 @@ let database = Database.database().reference()
             tempImgRef.putData(UIImageJPEGRepresentation(self.userimage.image!,0.8)!, metadata: metaData) { (data,error) in
                 if error == nil
                 {
+                    self.imagename=(data?.downloadURL()?.absoluteString)!
+                    self.iref = Database.database().reference().child("Housing").child("Postings").child(key)
+                    self.iref.updateChildValues(["imageName":self.imagename])
+//                    iref.updateChildValues("imageName",: self.imagename)
+                    
                     print("upload succesful")
                 }
                 else
@@ -245,11 +267,9 @@ let database = Database.database().reference()
                     print(error?.localizedDescription as Any)
                 }
             }
-
-            
             
             //adding the artist inside the generated unique key
-            self.ref.child(key).setValue(post)
+            
             
             //displaying message
         })
