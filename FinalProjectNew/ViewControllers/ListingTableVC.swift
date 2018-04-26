@@ -33,7 +33,7 @@ class ListingTableVC: UITableViewController,CLLocationManagerDelegate {
     var geodocoder = CLGeocoder()
     var placemark:CLLocation?
     let point = MKPointAnnotation()
-    var distaceFromCurrentLocation: Double = 15.0
+    var distaceFromCurrentLocation: Double = 25.0
     
     var listingList = Listings()
     var listings : [Listing] { //front end for LandmarkList model object
@@ -66,15 +66,15 @@ class ListingTableVC: UITableViewController,CLLocationManagerDelegate {
         
         switch sender.selectedSegmentIndex {
         case 0:
-            listings.sort(by: {(String($0.getRate().characters.dropLast()) as NSString).doubleValue < (String($1.getRate().characters.dropLast()) as NSString).doubleValue })
+            listingsNear.sort(by: {(String($0.getRate().characters.dropLast()) as NSString).doubleValue < (String($1.getRate().characters.dropLast()) as NSString).doubleValue })
             self.reloadData()
         case 1:
-            listings.sort(by: {(String($0.getRate().characters.dropLast()) as NSString).doubleValue > (String($1.getRate().characters.dropLast()) as NSString).doubleValue })
+            listingsNear.sort(by: {(String($0.getRate().characters.dropLast()) as NSString).doubleValue > (String($1.getRate().characters.dropLast()) as NSString).doubleValue })
             self.reloadData()        case 2:
-            listings.sort(by: {$0.getDistance() < $1.getDistance()})
+            listingsNear.sort(by: {$0.getDistance() < $1.getDistance()})
             self.reloadData()
         case 3:
-            listings.sort(by: {$0.getDistance() > $1.getDistance()})
+            listingsNear.sort(by: {$0.getDistance() > $1.getDistance()})
             self.reloadData()
         default:
             break;
@@ -127,7 +127,7 @@ class ListingTableVC: UITableViewController,CLLocationManagerDelegate {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         
-        return listings.count
+        return listingsNear.count
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
@@ -139,7 +139,7 @@ class ListingTableVC: UITableViewController,CLLocationManagerDelegate {
         var cell:ListingCell = tableView.dequeueReusableCell(withIdentifier: "ListingCell", for: indexPath) as! ListingCell
 
         // Configure the cell...
-        let listing = listings[indexPath.row]
+        let listing = listingsNear[indexPath.row]
         cell.listingName.text = listing.getName()
         cell.listingPlace.text = listing.getPlace()
         cell.listingRate.text = listing.getRate()
@@ -210,7 +210,7 @@ class ListingTableVC: UITableViewController,CLLocationManagerDelegate {
         // Pass the selected object to the new view controller.
         let indexPath = tableView.indexPathForSelectedRow
         let listingDetailVC  = segue.destination as! ListingDetailVC
-        let listing = listings[indexPath!.row]
+        let listing = listingsNear[indexPath!.row]
         listingDetailVC.title = listing.getName()
         listingDetailVC.listing = listing
         
@@ -245,7 +245,7 @@ class ListingTableVC: UITableViewController,CLLocationManagerDelegate {
                 if snapshot.childrenCount > 0{
                     for listgns in snapshot.children.allObjects as! [DataSnapshot]{
                         let lstngObject = listgns.value as? [String: AnyObject]
-                        
+                        let listingId = lstngObject?["id"] as! String
                         let area = lstngObject?["Area"] as! String
                         let bath = lstngObject?["Bath"] as! String
                         let bed = lstngObject?["Bed"] as! String
@@ -260,7 +260,6 @@ class ListingTableVC: UITableViewController,CLLocationManagerDelegate {
                         let zipcode = lstngObject?["zip"] as! String
                         let oven = lstngObject?["oven"] as! String
                         let petfriendly = lstngObject?["petfriendly"] as! String
-                        let pic = lstngObject?["pic"] as! String
                         let rate = lstngObject?["rate"] as! String
                         let type = lstngObject?["type"]as! String
                         let user = lstngObject?["user"] as! String
@@ -273,7 +272,7 @@ class ListingTableVC: UITableViewController,CLLocationManagerDelegate {
                         let fullNameArr = place.components(separatedBy: ",")
                         let addressString = "\(name)\(fullNameArr[0])\(zipcode)"
                         
-                        let l = Listing(area: area, bath: bath, bed: bed, houseDescription: houseDescription, dishwasher: dishwasher, foodpreference: foodpreference, furnished: furnished, houseid: houseid, multifamily: multifamily, name: name, place: place, zipcode: zipcode, oven: oven, petfriendly: petfriendly, pic: pic, rate: rate, type: type, user: user, washerdryer: washerdryer, imageName: imageName, contact: contact, email: email)
+                        let l = Listing(area: area, bath: bath, bed: bed, houseDescription: houseDescription, dishwasher: dishwasher, foodpreference: foodpreference, furnished: furnished, houseid: houseid, multifamily: multifamily, name: name, place: place, zipcode: zipcode, oven: oven, petfriendly: petfriendly, pic: "unknown", rate: rate, type: type, user: user, washerdryer: washerdryer, imageName: imageName, contact: contact, email: email)
                         
                         geocoder.geocodeAddressString(addressString) { (placemarks:[CLPlacemark]?, error:Error?) in
                             if let placemark = placemarks?[0]{
@@ -289,11 +288,24 @@ class ListingTableVC: UITableViewController,CLLocationManagerDelegate {
                                     
                                     if(distanceInMiles < self.distaceFromCurrentLocation){
                                         self.listingListNear.listings.append(l)
+                                        self.reloadData()
                                     }
                                     //                    self.showMap()
                                 }
                             }
                         }
+//                        let storage = Storage.storage().reference(forURL: "gs://finalproject-df371.appspot.com/dir")
+//                        let ime = "image0.png"
+//                        let imeURL = storage.child(ime)
+//                        
+//                        let fullimages = imageName.components(separatedBy: ",")
+//                        for imgNm in fullimages {
+//                            let storage = Storage.storage().reference(forURL: "gs://finalproject-df371.appspot.com/dir/")
+//                            let x = "image0.png"
+//                            let imageURL = storage.child(x)
+//                            let imageURLString = "\(imageURL)".replacingOccurrences(of: "gs://finalproject-df371.appspot.com/dir\(listingId)/", with: "")
+//                            print(1)
+//                        }
                         
                         
                         self.listingList.listings.append(l)

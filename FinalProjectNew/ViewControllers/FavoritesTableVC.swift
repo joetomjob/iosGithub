@@ -193,7 +193,6 @@ class FavoritesTableVC: UITableViewController, CLLocationManagerDelegate {
                         let zipcode = lstngObject?["zip"] as! String
                         let oven = lstngObject?["oven"] as! String
                         let petfriendly = lstngObject?["petfriendly"] as! String
-                        let pic = lstngObject?["pic"] as! String
                         let rate = lstngObject?["rate"] as! String
                         let type = lstngObject?["type"]as! String
                         let user = lstngObject?["user"] as! String
@@ -206,7 +205,7 @@ class FavoritesTableVC: UITableViewController, CLLocationManagerDelegate {
                         let fullNameArr = place.components(separatedBy: ",")
                         let addressString = "\(name)\(fullNameArr[0])\(zipcode)"
                         
-                        let l = Listing(area: area, bath: bath, bed: bed, houseDescription: houseDescription, dishwasher: dishwasher, foodpreference: foodpreference, furnished: furnished, houseid: houseid, multifamily: multifamily, name: name, place: place, zipcode: zipcode, oven: oven, petfriendly: petfriendly, pic: pic, rate: rate, type: type, user: user, washerdryer: washerdryer, imageName: imageName, contact: contact, email: email)
+                        let l = Listing(area: area, bath: bath, bed: bed, houseDescription: houseDescription, dishwasher: dishwasher, foodpreference: foodpreference, furnished: furnished, houseid: houseid, multifamily: multifamily, name: name, place: place, zipcode: zipcode, oven: oven, petfriendly: petfriendly, pic: "unknown", rate: rate, type: type, user: user, washerdryer: washerdryer, imageName: imageName, contact: contact, email: email)
                         
                         geocoder.geocodeAddressString(addressString) { (placemarks:[CLPlacemark]?, error:Error?) in
                             if let placemark = placemarks?[0]{
