@@ -10,7 +10,7 @@ import FirebaseAuth
 import FirebaseDatabase
 
 class LoginViewController: UIViewController {
-
+var uref : DatabaseReference!
     @IBOutlet weak var emailText: UITextField!
     @IBOutlet weak var passwordText: UITextField!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
@@ -44,6 +44,25 @@ class LoginViewController: UIViewController {
                         print("Cannot Register")
                     }
                     else{
+                        self.uref =  Database.database().reference().child("Housing").child("Users")
+                        
+                        self.uref.observeSingleEvent(of: .value, with: {(snapshot) in
+                            let key=String(snapshot.childrenCount)
+                            //let key = ref.childByAutoId().key
+                            
+                            //creating artist with the given values
+                            let post = [
+                                
+                                "user":self.emailText.text,
+                                "password" :self.passwordText.text,
+                                
+                         
+                            ]
+                            
+                        self.uref.child(key).setValue(post)
+                        })
+                        
+                        
                         self.performSegue(withIdentifier: "SignIn", sender: nil)
                     }
                 }
