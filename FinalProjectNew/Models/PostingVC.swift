@@ -12,7 +12,7 @@ import FirebaseDatabase
 
 
 class PostingVC: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource{
-   
+    var mylisting = Listing()
     @IBOutlet weak var bathlabel: UILabel!
 
     @IBOutlet weak var bedlabel: UILabel!
@@ -93,7 +93,7 @@ class PostingVC: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource{
     @IBAction func cont(_ sender: UIButton) {
         performSegue(withIdentifier: "segueonetotwo", sender: self)
     }
-    
+    var mkey=String()
     var typelist=["RENT","SUBLEASE","BUY"]
 
     override func viewDidLoad() {
@@ -107,10 +107,43 @@ class PostingVC: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource{
             // No user is signed in.
             // ...
         }
+        if mylisting.getId() != "Unknown"
+        {
+        mkey=mylisting.getId()
+        pl.text=mylisting.getPlace()
+        zip.text=mylisting.getZipCode()
+        type.text=mylisting.getType()
+        name.text=mylisting.getName()
+        desc.text=mylisting.getHouseDescription()
+        contact.text=mylisting.getContact()
+        fp.text=mylisting.getFoodPreference()
+        }
+        
+      //  loc.text=mylisting.getLocation().
+        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        }
+        
        
 
         // Do any additional setup after loading the view.
-    }
+    
 
 
     override func didReceiveMemoryWarning() {
@@ -185,6 +218,7 @@ class PostingVC: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource{
       //  secondController.mft=multifamily.text!
        // secondController.pft=pf.text!
         secondController.fpt=fp.text!
+        secondController.lkey=mkey
 
         
         

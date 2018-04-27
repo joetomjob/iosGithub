@@ -1,32 +1,41 @@
 //
-//  FavoritesTableVC.swift
+//  myListingsTableVC.swift
 //  FinalProjectNew
 //
-//  Created by Joe Tom Job  on 4/23/18.
+//  Created by Sikha Rani on 4/25/18.
 //  Copyright © 2018 Joe Tom Job . All rights reserved.
 //
 
 import UIKit
+import CoreLocation
 import Firebase
 import FirebaseDatabase
-import CoreLocation
 import MapKit
+extension UIImageView {
+    func downloadImageFrom(link:String, contentMode: UIViewContentMode) {
+        URLSession.shared.dataTask( with: NSURL(string:link)! as URL, completionHandler: {
+            (data, response, error) -> Void in
+            DispatchQueue.main.async {
+                self.contentMode =  contentMode
+                if let data = data { self.image = UIImage(data: data) }
+            }
+        }).resume()
+    }
+}
 
-class FavoritesTableVC: UITableViewController, CLLocationManagerDelegate {
-
+class myListingsTableVC: UITableViewController,CLLocationManagerDelegate {
+    @IBOutlet var mtableV: UITableView!
+   
     
-    @IBOutlet var tableV: UITableView!
-
+    
+    
     var locationManager:CLLocationManager?
     var location : CLLocation?
     var geodocoder = CLGeocoder()
     var placemark:CLLocation?
     let point = MKPointAnnotation()
     var distaceFromCurrentLocation: Double = 15.0
-    
-    var listingFav: [Listing] = []
-    var listingFavNames: [String] = []
-    
+    var currentuser=String()
     var listingList = Listings()
     var listings : [Listing] { //front end for LandmarkList model object
         get {
@@ -37,6 +46,7 @@ class FavoritesTableVC: UITableViewController, CLLocationManagerDelegate {
         }
     }
     
+    var currids:[String] = []
     var listingListNear = Listings()
     var listingsNear : [Listing] { //front end for LandmarkList model object
         get {
@@ -53,24 +63,20 @@ class FavoritesTableVC: UITableViewController, CLLocationManagerDelegate {
     var addressDict : [String:String]!
     var cllocationoflisting: CLLocation!
     
-    var array: [String]!
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
-
         if CLLocationManager.locationServicesEnabled(){
             locationManager?.requestAlwaysAuthorization()
         }
         locationManager?.desiredAccuracy = kCLLocationAccuracyBest
         locationManager?.startUpdatingLocation()
         locationManager?.delegate = self
-        
-        let defaults = UserDefaults.standard
-        array = defaults.array(forKey: "favorites") as? [String]
-
-        
+        self.listingsNear = []
         loadData()
         
+        self.reloadData()
+
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -78,22 +84,21 @@ class FavoritesTableVC: UITableViewController, CLLocationManagerDelegate {
          self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
-        let defaults = UserDefaults.standard
-        array = defaults.array(forKey: "favorites") as? [String]
+//    override func viewDidAppear(_ animated: Bool) {
+//        self.listingsNear = []
+//
+//        loadData()
+//        self.reloadData()
+//    }
     
-        loadData()
+    func reloadData(){
+        self.mtableV.reloadData()
     }
-
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    func reloadData(){
-        self.tableV.reloadData()
     }
 
     // MARK: - Table view data source
@@ -105,19 +110,17 @@ class FavoritesTableVC: UITableViewController, CLLocationManagerDelegate {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return listings.count
+        return listingsNear.count
     }
-
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
-        return 88.0;//Choose your custom row height
+        return 100.0;//Choose your custom row height
     }
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell:ListingCell = tableView.dequeueReusableCell(withIdentifier: "FavoriteCell", for: indexPath) as! ListingCell
+        var cell:ListingCell = tableView.dequeueReusableCell(withIdentifier: "myListingCell", for: indexPath) as! ListingCell
         
         // Configure the cell...
-        let listing = listings[indexPath.row]
+        let listing = listingsNear[indexPath.row]
         cell.listingName.text = listing.getName()
         cell.listingPlace.text = listing.getPlace()
         cell.listingRate.text = listing.getRate()
@@ -148,27 +151,6 @@ class FavoritesTableVC: UITableViewController, CLLocationManagerDelegate {
         
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-        let indexPath = tableView.indexPathForSelectedRow
-        let listingDetailVC  = segue.destination as! ListingDetailVC
-        let listing = listings[indexPath!.row]
-        listingDetailVC.title = listing.getName()
-        listingDetailVC.listing = listing
-        
-    }
-    
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            print("Deleted")
-            
-            self.listings.remove(at: indexPath.row)
-            self.listingFavNames.remove(at: indexPath.row)
-            self.tableView.deleteRows(at: [indexPath], with: .automatic)
-            UserDefaults.standard.set(self.listingFavNames, forKey:"favorites")
-        }
-    }
     
     func loadData() {
         do{
@@ -193,10 +175,6 @@ class FavoritesTableVC: UITableViewController, CLLocationManagerDelegate {
                         let zipcode = lstngObject?["zip"] as! String
                         let oven = lstngObject?["oven"] as! String
                         let petfriendly = lstngObject?["petfriendly"] as! String
-<<<<<<< Updated upstream
-=======
-                       // let pic = lstngObject?["pic"] as! String
->>>>>>> Stashed changes
                         let rate = lstngObject?["rate"] as! String
                         let type = lstngObject?["type"]as! String
                         let user = lstngObject?["user"] as! String
@@ -211,41 +189,18 @@ class FavoritesTableVC: UITableViewController, CLLocationManagerDelegate {
                         
                         let l = Listing(area: area, bath: bath, bed: bed, houseDescription: houseDescription, dishwasher: dishwasher, foodpreference: foodpreference, furnished: furnished, houseid: houseid, multifamily: multifamily, name: name, place: place, zipcode: zipcode, oven: oven, petfriendly: petfriendly, pic: "unknown", rate: rate, type: type, user: user, washerdryer: washerdryer, imageName: imageName, contact: contact, email: email)
                         
-                        geocoder.geocodeAddressString(addressString) { (placemarks:[CLPlacemark]?, error:Error?) in
-                            if let placemark = placemarks?[0]{
-                                if let location = placemark.location{
-                                    self.coords = location.coordinate //we need to use self because we are in a completion handler
-                                    self.cllocationoflisting =  CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-                                    //                                    setLocation(location: self.cllocationoflisting)
-                                    l.setLocation(location: self.cllocationoflisting)
-                                    
-                                    let distanceInMeters = self.location?.distance(from: l.getLocation()!)
-                                    let distanceInMiles = distanceInMeters! * 0.00062137
-                                    l.setDistance(distance: distanceInMiles)
-                                    
-                                    if(distanceInMiles < self.distaceFromCurrentLocation){
-                                        self.listingListNear.listings.append(l)
-                                    }
-                                    //                    self.showMap()
-                                }
-                            }
+                    
+                        if Auth.auth().currentUser != nil {
+                            // User is signed in.
+                            // ...
+                            self.currentuser = (Auth.auth().currentUser?.email)! as String
+                            // email.text=(Auth.auth().currentUser?.email)! as String
                         }
-                        
-                        
-//                        self.listingList.listings.append(l)
-                        
-                        if self.array != nil{
-                            if self.array!.contains(l.getName()) && !self.listingFavNames.contains(l.getName()) {
-                                    self.listingList.listings.append(l)
-                                    self.listingFavNames.append(l.getName())
-                                }
+                        if(user==self.currentuser && !self.currids.contains(houseid)){
+                            self.listingListNear.listings.append(l)
+                            self.currids.append(houseid)
                         }
-//                        else {
-//                            array = []
-//                            parksFav = []
-//                        }
-                        
-                        
+                        self.listingList.listings.append(l)
                     }
                     //                    self.tableVC!.listingList.listings = self.listOfListings
                     //                    self.tableVC!.tableV.reloadData()
@@ -258,6 +213,18 @@ class FavoritesTableVC: UITableViewController, CLLocationManagerDelegate {
             print(error)
         }
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        let indexPath = tableView.indexPathForSelectedRow
+        let mylistingDetailVC  = segue.destination as! PostingVC
+        let mylisting = listingsNear[indexPath!.row]
+        mylistingDetailVC.title = mylisting.getName()
+        mylistingDetailVC.mylisting = mylisting
+        
+    }
+
     /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
@@ -276,32 +243,51 @@ class FavoritesTableVC: UITableViewController, CLLocationManagerDelegate {
     }
     */
 
-    /*
-    // Override to support editing the table view.
+    
+   //  Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
+         //    Delete the row from the data source
+         //   tableView.deleteRows(at: [indexPath], with: .fade)
+            let x =  listingsNear[indexPath.row].getId()
+            let dref = Database.database().reference().child("Housing").child("Postings").child("\(x)")
+//            let did=dref.value(forKey: "id")
+            print(1)
+            
+            dref.removeValue()
+            
+          
+           
+            print("Deleted")
+            
+            self.listingsNear.remove(at: indexPath.row)
+            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+           mtableV.reloadData()
+          
+            
         } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+           //  Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        }
     }
-    */
+ 
 
-    /*
+    
     // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let item=listingsNear[fromIndexPath.row]
+        listingsNear.remove(at: fromIndexPath.row)
+       listingsNear.insert(item, at: destinationIndexPath.row)
 
     }
-    */
+    
 
-    /*
+    
     // Override to support conditional rearranging of the table view.
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the item to be re-orderable.
         return true
     }
-    */
+ 
 
     /*
     // MARK: - Navigation
