@@ -11,85 +11,43 @@ import Firebase
 import FirebaseDatabase
 
 
-class PostingVC: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource{
+class PostingVC: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource, UITextFieldDelegate{
     var mylisting = Listing()
+    var kbHeight: CGFloat!
     @IBOutlet weak var bathlabel: UILabel!
 
     @IBOutlet weak var bedlabel: UILabel!
     @IBOutlet weak var arealabel: UILabel!
     @IBOutlet weak var ratelabel: UILabel!
    @IBOutlet weak var pl: UITextField!
-    
-   
     @IBOutlet weak var type: UITextField!
-    
     @IBOutlet weak var typedropdown: UIPickerView!
-    
     @IBOutlet weak var name: UITextField!
     @IBOutlet weak var zip: UITextField!
-    
-   
-    
-    
     @IBOutlet weak var desc: UITextField!
-    
-    
-   
     @IBOutlet weak var user: UITextField!
-    
-    
     @IBOutlet weak var bed: UISlider!
-    
-  
-
-    
-    
     @IBOutlet weak var contact: UITextField!
-    
-   
-    
     @IBOutlet weak var fp: UITextField!
-    
-    
     @IBOutlet weak var bath: UISlider!
-    
-    
-  
     @IBOutlet weak var area: UISlider!
-    
     @IBAction func bathslider(_ sender: UISlider) {
-        
         bathlabel.text=String(Int(sender.value))
     }
-    
     
     @IBAction func bedslider(_ sender: UISlider) {
         bedlabel.text=String(Int(sender.value))
     }
-    
-    
-    
     @IBAction func areaslider(_ sender: UISlider) {
          arealabel.text=String(Int(sender.value))
-        
-        
     }
-    
-    
-
     
     @IBAction func rateslider(_ sender: UISlider) {
         
         ratelabel.text=String(Int(sender.value))
     }
     
-    
-   
     @IBOutlet weak var loc: UITextField!
- 
-   
-    
-   
     @IBAction func cont(_ sender: UIButton) {
         performSegue(withIdentifier: "segueonetotwo", sender: self)
     }
@@ -98,6 +56,10 @@ class PostingVC: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource{
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.loc.delegate = self
+        self.loc.resignFirstResponder()
+        textFieldShouldReturn(self.loc)
         if Auth.auth().currentUser != nil {
             // User is signed in.
             // ...
@@ -117,48 +79,19 @@ class PostingVC: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource{
         desc.text=mylisting.getHouseDescription()
         contact.text=mylisting.getContact()
         fp.text=mylisting.getFoodPreference()
-        }
-        
-      //  loc.text=mylisting.getLocation().
-        
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
             
         }
         
-       
-
-        // Do any additional setup after loading the view.
+    }
     
-
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    
-
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
-    
-   
-    
     func pickerView(_ pickerView:UIPickerView,numberOfRowsInComponent component: Int) -> Int
     {
         
@@ -176,22 +109,12 @@ class PostingVC: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource{
         self.typedropdown.isHidden=true
     }
     
-    
-    
-
-    
     func textFieldDidBeginEditing(textField:UITextField){
         if textField==self.type
         {
             self.typedropdown.isHidden=true
         }
     }
-    
-    
-    
-    
-    
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
         let secondController = segue.destination as! postingVC2
@@ -224,15 +147,40 @@ class PostingVC: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource{
         
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    /**
+     * All the below methods have been used to hide and show keyboard without overlaping or hiding the view behind
+     **/
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        self.view.endEditing(true)
+        return true
     }
-    */
-
+    
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let userInfo = notification.userInfo {
+            if let keyboardSize =  (userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+                kbHeight = keyboardSize.height
+                self.animateTextField(up: true)
+            }
+        }
+    }
+    @objc func keyboardWillHide(notification: NSNotification) {
+        self.animateTextField(up: false)
+    }
+    
+    func animateTextField(up: Bool) {
+        let movement = (up ? -kbHeight : kbHeight)
+        UIView.animate(withDuration: 0.3, animations: {
+            if (movement != nil){
+                self.view.frame = self.view.frame.offsetBy(dx: 0, dy: movement!)
+            }
+        })
+    }
+    
 }

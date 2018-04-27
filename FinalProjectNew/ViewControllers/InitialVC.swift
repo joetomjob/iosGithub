@@ -191,12 +191,14 @@ class InitialVC: UIViewController, CLLocationManagerDelegate {
                                     l.setLocation(location: self.cllocationoflisting)
                                     
                                     let distanceInMeters = self.location?.distance(from: l.getLocation()!)
-                                    let distanceInMiles = distanceInMeters! * 0.00062137
-                                    l.setDistance(Distance: distanceInMiles)
-                                    
-                                    if Float(distanceInMiles) < self.max{
-                                        self.universitytext.text = l.getName()
-                                        self.max = Float(distanceInMiles)
+                                    if distanceInMeters != nil {
+                                        let distanceInMiles = distanceInMeters! * 0.00062137
+                                        l.setDistance(Distance: distanceInMiles)
+                                        
+                                        if Float(distanceInMiles) < self.max{
+                                            self.universitytext.text = l.getName()
+                                            self.max = Float(distanceInMiles)
+                                        }
                                     }
                                     
                                     //                    self.showMap()

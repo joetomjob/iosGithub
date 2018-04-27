@@ -265,11 +265,24 @@ let database = Database.database().reference()
                     if error == nil
                     {
                         self.imagename=(data?.downloadURL()?.absoluteString)!
-                        self.iref = Database.database().reference().child("Housing").child("Postings").child(self.lkey)
-                        self.iref.updateChildValues(["imageName":self.imagename])
-    //                    iref.updateChildValues("imageName",: self.imagename)
+                        self.iref = Database.database().reference().child("Housing")//.child("Postings") //.child(self.lkey)
                         
-                        print("upload succesful")
+                        self.iref.child("Postings").observeSingleEvent(of: .value, with: { (snapshot) in
+                            if snapshot.hasChild(self.lkey){
+                                self.iref.updateChildValues(["imageName":self.imagename])
+                                print("upload succesful")
+                            }else{
+                                print("did not upload")
+                            }
+                            
+                            
+                        })
+                        
+                        
+//                        self.iref.updateChildValues(["imageName":self.imagename])
+//    //                    iref.updateChildValues("imageName",: self.imagename)
+//
+//                        print("upload succesful")
                     }
                     else
                     {

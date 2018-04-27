@@ -16,7 +16,12 @@ class Listing: NSObject, MKAnnotation {
     //needed for the MKAnnotation protocol
     var coordinate: CLLocationCoordinate2D {
         get {
-            return location!.coordinate
+//            if location == nil{
+//                var tempcoord: CLLocationCoordinate2D = CLLocationCoordinate2DMake(CLLocationDegrees latitude, CLLocationDegrees longitude);
+//            }
+//            else{
+                return location!.coordinate
+//            }
         }
     }
     
