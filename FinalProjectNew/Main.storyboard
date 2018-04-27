@@ -276,6 +276,9 @@
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="textStreetEdit:" destination="7u8-Y7-r3j" eventType="editingChanged" id="A7f-UW-5Or"/>
+                                </connections>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0Gx-Nf-Jcc">
                                 <rect key="frame" x="200" y="217" width="97" height="30"/>
@@ -315,7 +318,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="09v-gK-Wmr">
-                                <rect key="frame" x="93" y="38" width="375" height="162"/>
+                                <rect key="frame" x="117" y="38" width="258" height="133"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <connections>
                                     <outlet property="dataSource" destination="7u8-Y7-r3j" id="ztg-ox-KKA"/>
@@ -1635,7 +1638,7 @@
         <image name="post" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="11T-ez-ZNI"/>
+        <segue reference="vfc-Ep-TVE"/>
         <segue reference="FqM-AC-pDF"/>
         <segue reference="kJb-b7-fKa"/>
         <segue reference="Bmx-zv-ftY"/>

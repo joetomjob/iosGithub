@@ -10,6 +10,17 @@ import UIKit
 import Firebase
 import FirebaseDatabase
 
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+}
 
 class PostingVC: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource, UITextFieldDelegate{
     var mylisting = Listing()
@@ -51,15 +62,17 @@ class PostingVC: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource, U
     @IBAction func cont(_ sender: UIButton) {
         performSegue(withIdentifier: "segueonetotwo", sender: self)
     }
+
     var mkey=String()
     var typelist=["RENT","SUBLEASE","BUY"]
-
+    var offsetY:CGFloat = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.loc.delegate = self
-        self.loc.resignFirstResponder()
-        textFieldShouldReturn(self.loc)
+//        contact.addTarget(self, action: "myDebitDetector:", for: UIControlEvents.touchDown)
+
+        self.hideKeyboardWhenTappedAround()
+        
         if Auth.auth().currentUser != nil {
             // User is signed in.
             // ...
@@ -146,41 +159,6 @@ class PostingVC: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource, U
         
         
     }
-    
-    /**
-     * All the below methods have been used to hide and show keyboard without overlaping or hiding the view behind
-     **/
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        self.view.endEditing(true)
-        return true
-    }
-    
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if let userInfo = notification.userInfo {
-            if let keyboardSize =  (userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-                kbHeight = keyboardSize.height
-                self.animateTextField(up: true)
-            }
-        }
-    }
-    @objc func keyboardWillHide(notification: NSNotification) {
-        self.animateTextField(up: false)
-    }
-    
-    func animateTextField(up: Bool) {
-        let movement = (up ? -kbHeight : kbHeight)
-        UIView.animate(withDuration: 0.3, animations: {
-            if (movement != nil){
-                self.view.frame = self.view.frame.offsetBy(dx: 0, dy: movement!)
-            }
-        })
-    }
+
     
 }
