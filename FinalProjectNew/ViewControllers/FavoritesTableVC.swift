@@ -193,10 +193,6 @@ class FavoritesTableVC: UITableViewController, CLLocationManagerDelegate {
                         let zipcode = lstngObject?["zip"] as! String
                         let oven = lstngObject?["oven"] as! String
                         let petfriendly = lstngObject?["petfriendly"] as! String
-<<<<<<< Updated upstream
-=======
-                       // let pic = lstngObject?["pic"] as! String
->>>>>>> Stashed changes
                         let rate = lstngObject?["rate"] as! String
                         let type = lstngObject?["type"]as! String
                         let user = lstngObject?["user"] as! String

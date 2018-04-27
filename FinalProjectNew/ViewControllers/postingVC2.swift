@@ -9,6 +9,8 @@
 import UIKit
 import Firebase
 import FirebaseDatabase
+import CoreLocation
+
 class postingVC2: UIViewController, UIImagePickerControllerDelegate,UINavigationControllerDelegate {
  var mylisting = Listing()
     @IBOutlet weak var userimage: UIImageView!
@@ -47,6 +49,9 @@ var namet=String()
     var lkey=String()
     
     
+    var coords: CLLocationCoordinate2D!
+    var addressDict : [String:String]!
+    var cllocationoflisting: CLLocation!
     
   
     @IBOutlet weak var wd: UILabel!
@@ -136,11 +141,6 @@ var namet=String()
     }
     
     
-    
-    
-    
-    
-    
     @IBOutlet weak var availdate: UIDatePicker!
     
     
@@ -148,9 +148,8 @@ var namet=String()
          date.text="\(availdate.date)"
     }
     @IBAction func post(_ sender: UIButton) {
+        
         postData()
-        
-        
     }
     
     @IBOutlet weak var date: UILabel!
@@ -168,24 +167,6 @@ var namet=String()
         let result = formatter.string(from: todaysdate)
         date.text=result
 let database = Database.database().reference()
-        // Do any additional setup after loading the view.
-//        let storage=Storage.storage().reference()
-//        //let image=UIImage(named: "globe.png")
-//
-//        let tempImgRef=storage.child("dir/tmpImg.png")
-//        let metadata=StorageMetadata()
-//        metadata.contentType="image/png"
-//
-//        tempImgRef.putData(UIImagePNGRepresentation(image!)!, metadata: metadata) { (data,error) in
-//            if error == nil
-//            {
-//               print("upload succesful")
-//            }
-//            else
-//            {
-//                print(error?.localizedDescription)
-//            }
-//        }
         
     }
 
@@ -193,6 +174,14 @@ let database = Database.database().reference()
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func isEmptyLists(dicts: [String: String]) -> Bool {
+        for v in dicts.values {
+            if v=="" { return true }
+        }
+        return false
+    }
+    
     func postData()
     {
         
@@ -203,12 +192,7 @@ let database = Database.database().reference()
         let pft=pf.text
         let furnishedt=furnished.text
         let mft=mf.text
-        
-        
-        
-        
-        
-        
+
         ref =  Database.database().reference().child("Housing").child("Postings")
         if Auth.auth().currentUser != nil {
             // User is signed in.
@@ -244,7 +228,7 @@ let database = Database.database().reference()
             //let key = ref.childByAutoId().key
             let pict="image\(self.lkey).jpg"
             //creating artist with the given values
-            let post = [
+            var post = [
                 
                 "user":self.user,
                 "description" :self.desct,
@@ -270,15 +254,13 @@ let database = Database.database().reference()
             ]
           
             //if(self.user.count == 0)
-            self.ref.child(self.lkey).setValue(post)
             
             
             let storage=Storage.storage().reference()
             let tempImgRef=storage.child("dir\(self.lkey)/\"image1.jpg")
             let metaData = StorageMetadata()
             metaData.contentType = "image/jpg"
-            if self.imagename != ""
-            {
+            
                 tempImgRef.putData(UIImageJPEGRepresentation(self.userimage.image!,0.8)!, metadata: metaData) { (data,error) in
                     if error == nil
                     {
@@ -294,47 +276,44 @@ let database = Database.database().reference()
                         print(error?.localizedDescription as Any)
                     }
                 }
+            
+            post["imageName"] = "tempImageName.jpg"
+            if self.isEmptyLists(dicts: post) == false
+            {
+                self.ref.child(self.lkey).setValue(post)
+                
+                let geocoder = CLGeocoder()
+                let addressString = "\(self.namet)\(self.loct)\(self.zipt)" as String
+                
+                geocoder.geocodeAddressString(addressString) { (placemarks:[CLPlacemark]?, error:Error?) in
+                    if let placemark = placemarks?[0]{
+                        if let location = placemark.location{
+                            self.coords = location.coordinate //we need to use self because we are in a completion handler
+                            self.cllocationoflisting =  CLLocation(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+                        }
+                        let alert = UIAlertController(title: "Posting Done", message: "", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        self.present(alert, animated: true)
+                    }
+                    else{
+                        let dref = Database.database().reference().child("Housing").child("Postings").child("\(self.lkey)")
+                        dref.removeValue()
+                        let alert = UIAlertController(title: "Address not valid", message: "Please give valid address", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        self.present(alert, animated: true)
+                    }
+                }
+                
             }
-            
-            
-            //adding the artist inside the generated unique key
-            
-            
-            //displaying message
+            else{
+                let alert = UIAlertController(title: "Empty values", message: "Please enter all the details.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true)
+            }
         })
         
     }
-    
-//        
-//        lazy var profileImageView:UIImageView = {
-//            let userimage=UIImageView()
-//            userimage.image=UIImage(named:"placeholder")
-//            userimage.contentMode = .scaleAspectFill
-//            userimage.addGestureRecognizer(UIGestureRecognizer(target: self, action: #selector(handleSelectProfileImageView))
-//            
-//            
-//            
-//            
-//            
-//            )
-//            userimage.isUserInteractionEnabled=true
-//            return userimage
-//        }()
-//  //  extention
-//    @objc func handleSelectProfileImageView()
-//        {
-//            
-//            
-//            
-//            
-//        }
-    
-    
-    
-    
-    
-    
-    
+
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
     
@@ -344,56 +323,15 @@ let database = Database.database().reference()
             
             }
             
-            
             else{
-                
             
             }
-        
             self.dismiss(animated: true, completion: nil)
         
             var data = Data()
            data = UIImageJPEGRepresentation(userimage.image!,0.8)!
         
-            // set upload path
-          //  let filePath = "\(Auth.auth()!.currentUser!.uid)/\("userimage")"
-        
-        
-        
-        
-        
-//            self.storageRef.child(filePath).putData(data, metadata: metaData){(metaData,error) in
-//                if let error = error {
-//                    print(error.localizedDescription)
-//                    return
-//                }else{
-//                    //store downloadURL
-//                    let downloadURL = metaData!.downloadURL()!.absoluteString
-//                    //store downloadURL at database
-//                    self.ref.child("users").child(FIRAuth.auth()!.currentUser!.uid).updateChildValues(["userimage": downloadURL])
-//                }
-        
-        
-        
         
             }
         }
-        
-        
-        
-        
-        
-
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 

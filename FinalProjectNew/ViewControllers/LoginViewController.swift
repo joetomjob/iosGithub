@@ -21,6 +21,8 @@ var uref : DatabaseReference!
                     if user != nil{
                         var ref: DatabaseReference!
                         ref = Database.database().reference()
+                        UserDefaults.standard.set(self.emailText.text!, forKey: "email")
+                        UserDefaults.standard.set(self.passwordText.text!, forKey: "password")
                         self.performSegue(withIdentifier: "SignIn", sender: nil)
                     }
                     else{
@@ -44,6 +46,8 @@ var uref : DatabaseReference!
                         print("Cannot Register")
                     }
                     else{
+                        UserDefaults.standard.set(self.emailText.text!, forKey: "email")
+                        UserDefaults.standard.set(self.passwordText.text!, forKey: "password")
                         self.uref =  Database.database().reference().child("Housing").child("Users")
                         
                         self.uref.observeSingleEvent(of: .value, with: {(snapshot) in
@@ -70,6 +74,9 @@ var uref : DatabaseReference!
         }
     }
     override func viewDidLoad() {
+        
+        emailText.text = UserDefaults.standard.string(forKey: "email") as String?
+        passwordText.text = UserDefaults.standard.string(forKey: "password") as String?
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
