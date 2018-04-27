@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import FirebaseDatabase
 class postingVC2: UIViewController, UIImagePickerControllerDelegate,UINavigationControllerDelegate {
- 
+ var mylisting = Listing()
     @IBOutlet weak var userimage: UIImageView!
     
     @IBAction func upload(_ sender: UIButton) {
@@ -44,6 +44,10 @@ var namet=String()
     var loct=String()
    var contactt=String()
     var imagename=String()
+    var lkey=String()
+    
+    
+    
   
     @IBOutlet weak var wd: UILabel!
     
@@ -217,15 +221,34 @@ let database = Database.database().reference()
         }
         
         ref.observeSingleEvent(of: .value, with: {(snapshot) in
-            let key=String(snapshot.childrenCount)
+            var key:String!
+            var y=0
+            
+            if (self.lkey == ""){
+                for snap in snapshot.children {
+                    let userSnap = snap as! DataSnapshot
+                    let uid = userSnap.key //the uid of each user
+                    let userDict = userSnap.value as! [String:String]
+                    
+                    if (Int(uid)!) > (Int(y))
+                    {
+                    y=(Int(uid)!)
+                       let z=y+1
+                        self.lkey=String(z)
+                    }
+                  //  let id = userDict["id"] as! String?
+                }
+            }
+            
+            
             //let key = ref.childByAutoId().key
-            let pict="image\(key).png"
+            let pict="image\(self.lkey).jpg"
             //creating artist with the given values
             let post = [
                 
                 "user":self.user,
                 "description" :self.desct,
-                "id" : key,
+                "id" : self.lkey,
                 "name" : self.namet as String,
                 "imageName" : self.imagename as String,
                 "place" : "\(self.loct),\(self.placet)" as String,
@@ -245,28 +268,34 @@ let database = Database.database().reference()
                 "email":self.email,
                 "oven":ovent! as String
             ]
-            self.ref.child(key).setValue(post)
+          
+            //if(self.user.count == 0)
+            self.ref.child(self.lkey).setValue(post)
+            
             
             let storage=Storage.storage().reference()
-            let tempImgRef=storage.child("dir\(key)/\"image1.jpg")
+            let tempImgRef=storage.child("dir\(self.lkey)/\"image1.jpg")
             let metaData = StorageMetadata()
             metaData.contentType = "image/jpg"
-            
-            tempImgRef.putData(UIImageJPEGRepresentation(self.userimage.image!,0.8)!, metadata: metaData) { (data,error) in
-                if error == nil
-                {
-                    self.imagename=(data?.downloadURL()?.absoluteString)!
-                    self.iref = Database.database().reference().child("Housing").child("Postings").child(key)
-                    self.iref.updateChildValues(["imageName":self.imagename])
-//                    iref.updateChildValues("imageName",: self.imagename)
-                    
-                    print("upload succesful")
-                }
-                else
-                {
-                    print(error?.localizedDescription as Any)
+            if self.imagename != ""
+            {
+                tempImgRef.putData(UIImageJPEGRepresentation(self.userimage.image!,0.8)!, metadata: metaData) { (data,error) in
+                    if error == nil
+                    {
+                        self.imagename=(data?.downloadURL()?.absoluteString)!
+                        self.iref = Database.database().reference().child("Housing").child("Postings").child(self.lkey)
+                        self.iref.updateChildValues(["imageName":self.imagename])
+    //                    iref.updateChildValues("imageName",: self.imagename)
+                        
+                        print("upload succesful")
+                    }
+                    else
+                    {
+                        print(error?.localizedDescription as Any)
+                    }
                 }
             }
+            
             
             //adding the artist inside the generated unique key
             
