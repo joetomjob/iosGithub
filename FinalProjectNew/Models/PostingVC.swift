@@ -64,6 +64,7 @@ class PostingVC: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource, U
     }
 
     var mkey=String()
+    var imageName = String()
     var typelist=["RENT","SUBLEASE","BUY"]
     var offsetY:CGFloat = 0
     override func viewDidLoad() {
@@ -92,6 +93,7 @@ class PostingVC: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource, U
         desc.text=mylisting.getHouseDescription()
         contact.text=mylisting.getContact()
         fp.text=mylisting.getFoodPreference()
+        imageName = mylisting.getImageName()
             
         }
         
@@ -155,7 +157,7 @@ class PostingVC: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource, U
        // secondController.pft=pf.text!
         secondController.fpt=fp.text!
         secondController.lkey=mkey
-
+        secondController.imagenameforedit = self.imageName
         
         
     }

@@ -47,6 +47,7 @@ var namet=String()
    var contactt=String()
     var imagename=String()
     var lkey=String()
+    var imagenameforedit = String()
     
     
     var coords: CLLocationCoordinate2D!
@@ -166,8 +167,6 @@ var namet=String()
         formatter.dateFormat = "MM.dd.yyyy"
         let result = formatter.string(from: todaysdate)
         date.text=result
-let database = Database.database().reference()
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -234,7 +233,8 @@ let database = Database.database().reference()
                 "description" :self.desct,
                 "id" : self.lkey,
                 "name" : self.namet as String,
-                "imageName" : self.imagename as String,
+//                "imageName" : self.imagename as String,
+                "imageName" : self.imagenameforedit == "" ? self.imagename as String : self.imagenameforedit,
                 "place" : "\(self.loct),\(self.placet)" as String,
                 "rate" : "\(self.ratet)$" as String,
                 "type" : self.typet as String,
@@ -261,7 +261,9 @@ let database = Database.database().reference()
             let metaData = StorageMetadata()
             metaData.contentType = "image/jpg"
             
-                tempImgRef.putData(UIImageJPEGRepresentation(self.userimage.image!,0.8)!, metadata: metaData) { (data,error) in
+            if (self.userimage.image != nil) {
+                post["imageName"] = "tempImageName.jpg"
+                tempImgRef.putData(UIImageJPEGRepresentation(self.userimage.image!,0.2)!, metadata: metaData) { (data,error) in
                     if error == nil
                     {
                         self.imagename=(data?.downloadURL()?.absoluteString)!
@@ -269,28 +271,26 @@ let database = Database.database().reference()
                         
                         self.iref.child("Postings").observeSingleEvent(of: .value, with: { (snapshot) in
                             if snapshot.hasChild(self.lkey){
-                                self.iref.updateChildValues(["imageName":self.imagename])
+                                self.iref.child("Postings").child(self.lkey).updateChildValues(["imageName":self.imagename])
+//                                self.iref.updateChildValues(["imageName":self.imagename])
                                 print("upload succesful")
                             }else{
                                 print("did not upload")
                             }
-                            
-                            
                         })
-                        
-                        
-//                        self.iref.updateChildValues(["imageName":self.imagename])
-//    //                    iref.updateChildValues("imageName",: self.imagename)
-//
-//                        print("upload succesful")
                     }
                     else
                     {
                         print(error?.localizedDescription as Any)
                     }
                 }
-            
-            post["imageName"] = "tempImageName.jpg"
+            }
+            else if self.imagenameforedit == ""{
+                post["imageName"] = "https://firebasestorage.googleapis.com/v0/b/finalproject-df371.appspot.com/o/dir%2Fimage2.png?alt=media&token=1e04c663-6bfd-455a-b04c-adcf378a33b2"
+            }
+//            if post["imageName"] == ""{
+//                post["imageName"] = "tempImageName.jpg"
+//            }
             if self.isEmptyLists(dicts: post) == false
             {
                 self.ref.child(self.lkey).setValue(post)

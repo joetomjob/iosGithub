@@ -276,9 +276,6 @@
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <action selector="textStreetEdit:" destination="7u8-Y7-r3j" eventType="editingChanged" id="A7f-UW-5Or"/>
-                                </connections>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0Gx-Nf-Jcc">
                                 <rect key="frame" x="200" y="217" width="97" height="30"/>
@@ -1508,7 +1505,7 @@
         <scene sceneID="wtk-HB-GGa">
             <objects>
                 <navigationController storyboardIdentifier="Nav" title="Nav" automaticallyAdjustsScrollViewInsets="NO" id="aks-Gf-Mfc" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Nav" image="post" id="Rrn-Gi-Mfa"/>
+                    <tabBarItem key="tabBarItem" title="Posting" image="post" id="Rrn-Gi-Mfa"/>
                     <toolbarItems/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="1W1-uk-A8v">
@@ -1638,9 +1635,10 @@
         <image name="post" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="oSm-H9-bDR"/>
         <segue reference="vfc-Ep-TVE"/>
         <segue reference="FqM-AC-pDF"/>
         <segue reference="kJb-b7-fKa"/>
-        <segue reference="Bmx-zv-ftY"/>
+        <segue reference="e4b-Wq-0dW"/>
     </inferredMetricsTieBreakers>
 </document>
