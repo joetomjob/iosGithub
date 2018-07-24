@@ -1,4 +1,4 @@
-#My ios App : University Housing
+# University Housing
 
 This application acts as a platform for students looking for housing which includes rent, sublet
 and roommate requests. Currently there is no such existing housing application which acts as a
